@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Pesca Argentina</title>
+  <meta name="description" content="Mapa de pesca deportiva de Argentina: especies por zona, carnadas y métodos, clima, luna y mareas.">
+  <meta name="theme-color" content="#0f4c5c">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="stylesheet" href="vendor/leaflet/leaflet.css">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header class="barra">
+    <h1 class="marca"><img src="icons/icon.svg" alt="" width="28" height="28"> Pesca Argentina</h1>
+    <form id="buscador" class="buscador" role="search">
+      <input id="busqueda" type="search" placeholder="Buscar lugar (ej.: Chascomús, Goya, Mar del Plata)" autocomplete="off" aria-label="Buscar lugar">
+      <button type="submit" aria-label="Buscar">Buscar</button>
+    </form>
+    <div class="acciones">
+      <button id="btn-ubicacion" type="button" title="Usar mi ubicación actual">📍 Mi ubicación</button>
+      <label class="fecha" title="Fecha para planificar la salida">
+        <span>Fecha</span>
+        <input id="fecha" type="date">
+      </label>
+    </div>
+  </header>
+
+  <main class="contenido">
+    <div id="mapa" aria-label="Mapa"></div>
+
+    <aside id="panel" class="panel">
+      <button id="asa" class="asa" type="button" aria-label="Expandir o contraer panel"></button>
+      <nav class="pestanas" role="tablist">
+        <button role="tab" data-tab="lugar" class="activa">Lugar</button>
+        <button role="tab" data-tab="clima">Clima · Luna</button>
+        <button role="tab" data-tab="especies">Especies</button>
+        <button role="tab" data-tab="reportes">Reportes</button>
+      </nav>
+
+      <section id="tab-lugar" class="tab activa" role="tabpanel">
+        <div id="lugar-vacio" class="vacio">
+          <p><strong>Toque el mapa</strong>, busque un lugar o use <strong>Mi ubicación</strong> para ver qué peces hay en la zona, con qué carnadas y métodos se pescan, y el índice de actividad según temporada, clima y luna.</p>
+          <p class="nota">Los círculos del mapa son zonas de pesca conocidas: azul = agua dulce, verde agua = mar.</p>
+        </div>
+        <div id="lugar"></div>
+      </section>
+
+      <section id="tab-clima" class="tab" role="tabpanel">
+        <div id="clima"><p class="vacio">Seleccione un punto en el mapa.</p></div>
+      </section>
+
+      <section id="tab-especies" class="tab" role="tabpanel">
+        <label class="campo">Mostrar en el mapa las zonas de:
+          <select id="filtro-especie"><option value="">Todas las especies</option></select>
+        </label>
+        <div id="catalogo"></div>
+      </section>
+
+      <section id="tab-reportes" class="tab" role="tabpanel">
+        <p class="nota">Registre sus salidas. Los reportes se guardan en este dispositivo, se muestran en el mapa y alimentan las recomendaciones de carnadas de la zona. Puede exportarlos e importarlos para compartirlos con otros pescadores.</p>
+        <form id="form-reporte" class="form-reporte">
+          <div class="fila">
+            <label>Especie <select name="especie" required></select></label>
+            <label>Resultado
+              <select name="resultado">
+                <option value="0">Sin pique</option>
+                <option value="1">Pocas piezas</option>
+                <option value="2" selected>Normal</option>
+                <option value="3">Muy bueno</option>
+              </select>
+            </label>
+          </div>
+          <div class="fila">
+            <label>Carnada / señuelo <input name="carnada" maxlength="80" placeholder="ej.: mojarra viva"></label>
+            <label>Método <input name="metodo" maxlength="80" placeholder="ej.: flote, fondo, spinning"></label>
+          </div>
+          <label>Notas <textarea name="notas" rows="2" maxlength="400" placeholder="Horario, marea, color del agua..."></textarea></label>
+          <p id="reporte-ubicacion" class="nota">Ubicación: seleccione un punto en el mapa.</p>
+          <button type="submit">Guardar reporte</button>
+        </form>
+        <div class="fila botones">
+          <button id="exportar" type="button">Exportar (JSON)</button>
+          <label class="boton">Importar <input id="importar" type="file" accept="application/json" hidden></label>
+        </div>
+        <div id="lista-reportes"></div>
+      </section>
+
+      <footer class="aviso">
+        Datos orientativos. Vedas, cupos, tallas mínimas y licencias varían por provincia y temporada: verifique la normativa oficial antes de pescar.
+        Clima: <a href="https://open-meteo.com" target="_blank" rel="noopener">Open-Meteo</a>. Mapas: © OpenStreetMap, Esri.
+      </footer>
+    </aside>
+  </main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="vendor/leaflet/leaflet.js"></script>
+  <script src="vendor/suncalc.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/pesca.js"></script>
+  <script src="js/clima.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

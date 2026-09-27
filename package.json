@@ -1,0 +1,10 @@
+{
+  "name": "pesca-argentina",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Mapa de pesca deportiva de Argentina con clima, luna y especies por zona.",
+  "scripts": {
+    "start": "python3 -m http.server 8080",
+    "test": "node --test tests/*.test.js"
+  }
+}
