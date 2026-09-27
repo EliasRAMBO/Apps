@@ -14,31 +14,28 @@
 </head>
 <body>
   <header class="barra">
-    <h1 class="marca"><img src="icons/icon.svg" alt="" width="28" height="28"> Pesca Argentina</h1>
+    <h1 class="marca"><img src="icons/icon.svg" alt="" width="28" height="28"><span>Pesca Argentina</span></h1>
     <form id="buscador" class="buscador" role="search">
-      <input id="busqueda" type="search" placeholder="Buscar lugar (ej.: Chascomús, Goya, Mar del Plata)" autocomplete="off" aria-label="Buscar lugar">
+      <input id="busqueda" type="search" placeholder="Buscar lugar: Chascomús, Goya…" autocomplete="off" aria-label="Buscar lugar">
       <button type="submit" aria-label="Buscar">Buscar</button>
     </form>
-    <div class="acciones">
-      <button id="btn-ubicacion" type="button" title="Usar mi ubicación actual">📍 Mi ubicación</button>
-      <label class="fecha" title="Fecha para planificar la salida">
-        <span>Fecha</span>
-        <input id="fecha" type="date">
-      </label>
-    </div>
+    <button id="btn-ubicacion" class="btn-ubicacion" type="button" title="Usar mi ubicación actual" aria-label="Usar mi ubicación actual">📍<span> Mi ubicación</span></button>
   </header>
 
   <main class="contenido">
     <div id="mapa" aria-label="Mapa"></div>
 
     <aside id="panel" class="panel">
-      <button id="asa" class="asa" type="button" aria-label="Expandir o contraer panel"></button>
+      <button id="asa" class="asa" type="button" aria-label="Expandir o contraer panel"><span class="asa-texto">Toque el mapa · deslice para ver detalles</span></button>
       <nav class="pestanas" role="tablist">
         <button role="tab" data-tab="lugar" class="activa">Lugar</button>
         <button role="tab" data-tab="clima">Clima · Luna</button>
         <button role="tab" data-tab="especies">Especies</button>
         <button role="tab" data-tab="reportes">Reportes</button>
       </nav>
+      <div class="barra-fecha">
+        <label title="Fecha para planificar la salida">Fecha de salida <input id="fecha" type="date"></label>
+      </div>
 
       <section id="tab-lugar" class="tab activa" role="tabpanel">
         <div id="lugar-vacio" class="vacio">

@@ -94,7 +94,7 @@
   mapa.on("click", e => seleccionar(e.latlng.lat, e.latlng.lng));
 
   // ---------------- Selección de punto ----------------
-  async function seleccionar(lat, lng, nombre) {
+  async function seleccionar(lat, lng, nombre, zoom) {
     estado.punto = { lat, lng, nombre: nombre || null };
     estado.clima = null;
     estado.climaError = null;
@@ -105,6 +105,7 @@
     $("#reporte-ubicacion").textContent = `Ubicación: ${lat.toFixed(4)}, ${lng.toFixed(4)}`;
 
     abrirPestana("lugar");
+    mostrarEnMapa(lat, lng, zoom);
     render();
 
     if (!nombre) nombrarLugar(lat, lng, pedido);
@@ -497,8 +498,7 @@
       const j = await r.json();
       if (!j.length) { aviso("No se encontró el lugar."); return; }
       const lat = +j[0].lat, lng = +j[0].lon;
-      mapa.setView([lat, lng], 11);
-      seleccionar(lat, lng, j[0].display_name.split(",").slice(0, 2).join(","));
+      seleccionar(lat, lng, j[0].display_name.split(",").slice(0, 2).join(","), 11);
     } catch (err) {
       aviso("Error de conexión al buscar.");
     }
@@ -510,8 +510,7 @@
     navigator.geolocation.getCurrentPosition(
       pos => {
         const { latitude: lat, longitude: lng } = pos.coords;
-        mapa.setView([lat, lng], 11);
-        seleccionar(lat, lng);
+        seleccionar(lat, lng, null, 11);
         aviso("Ubicación obtenida.");
       },
       err => aviso(err.code === 1 ? "Permiso de ubicación denegado." : "No se pudo obtener la ubicación (requiere HTTPS)."),
@@ -520,23 +519,98 @@
   });
 
   function irAZona(z) {
-    mapa.setView([z.lat, z.lng], 10);
-    seleccionar(z.lat, z.lng, z.nombre);
+    seleccionar(z.lat, z.lng, z.nombre, 10);
   }
 
   // ---------------- Panel, pestañas y fecha ----------------
   function abrirPestana(t) {
     document.querySelectorAll(".pestanas button").forEach(b => b.classList.toggle("activa", b.dataset.tab === t));
     document.querySelectorAll(".tab").forEach(s => s.classList.toggle("activa", s.id === "tab-" + t));
-    $("#panel").classList.add("abierto");
+    if (panelEstado === "min") fijarPanel("medio");
   }
+
+  // Panel inferior en celular: "min" deja el mapa casi completo a la vista,
+  // "medio" muestra mapa y detalle, "max" prioriza el detalle.
+  const esMovil = () => window.matchMedia("(max-width: 820px)").matches;
+  const ALTO_MIN = 96;
+  let panelEstado = "min";
+
+  function altoPanel(est) {
+    const total = $(".contenido").clientHeight;
+    if (est === "max") return Math.round(total * 0.88);
+    if (est === "medio") return Math.round(total * 0.5);
+    return ALTO_MIN;
+  }
+
+  function aplicarAlto(px) {
+    const panel = $("#panel");
+    if (!esMovil()) { panel.style.height = ""; $(".contenido").style.removeProperty("--alto-panel"); return; }
+    panel.style.height = px + "px";
+    $(".contenido").style.setProperty("--alto-panel", px + "px");
+  }
+
+  function fijarPanel(est) {
+    panelEstado = est;
+    $("#panel").dataset.estado = est;
+    aplicarAlto(altoPanel(est));
+  }
+
+  /** Centra el punto en la parte del mapa que no tapa el panel. */
+  function mostrarEnMapa(lat, lng, zoom) {
+    if (zoom != null) mapa.setView([lat, lng], zoom, { animate: false });
+    if (!esMovil()) return;
+    const visible = $(".contenido").clientHeight - altoPanel(panelEstado);
+    const y = mapa.latLngToContainerPoint([lat, lng]).y;
+    if (zoom != null || y > visible - 40 || y < 40) mapa.panBy([0, y - visible / 2]);
+  }
+
   document.querySelector(".pestanas").addEventListener("click", e => {
     if (e.target.dataset.tab) abrirPestana(e.target.dataset.tab);
   });
+
+  // Arrastre de la hoja: la asa y la barra de pestañas se pueden deslizar.
+  (function () {
+    const panel = $("#panel");
+    let inicioY = null, altoInicial = 0, movido = false;
+    const empezar = e => {
+      if (!esMovil()) return;
+      inicioY = e.clientY; altoInicial = panel.getBoundingClientRect().height; movido = false;
+    };
+    const mover = e => {
+      if (inicioY == null) return;
+      const d = inicioY - e.clientY;
+      if (!movido && Math.abs(d) < 8) return;
+      movido = true;
+      panel.classList.add("arrastrando");
+      const total = $(".contenido").clientHeight;
+      aplicarAlto(Math.max(ALTO_MIN, Math.min(total * 0.92, altoInicial + d)));
+    };
+    const terminar = () => {
+      if (inicioY == null) return;
+      inicioY = null;
+      panel.classList.remove("arrastrando");
+      if (!movido) return;
+      const alto = panel.getBoundingClientRect().height;
+      const opciones = ["min", "medio", "max"].map(k => [k, Math.abs(altoPanel(k) - alto)]);
+      fijarPanel(opciones.sort((a, b) => a[1] - b[1])[0][0]);
+    };
+    [$("#asa"), document.querySelector(".pestanas")].forEach(el => {
+      el.addEventListener("pointerdown", empezar);
+      el.addEventListener("click", e => { if (movido) { e.stopImmediatePropagation(); e.preventDefault(); movido = false; } }, true);
+    });
+    window.addEventListener("pointermove", mover);
+    window.addEventListener("pointerup", terminar);
+    window.addEventListener("pointercancel", terminar);
+  })();
+
   $("#asa").addEventListener("click", () => {
-    $("#panel").classList.toggle("abierto");
-    setTimeout(() => mapa.invalidateSize(), 250);
+    fijarPanel({ min: "medio", medio: "max", max: "min" }[panelEstado]);
   });
+
+  window.addEventListener("resize", () => { aplicarAlto(altoPanel(panelEstado)); mapa.invalidateSize(); });
+  fijarPanel("min");
+  // Vista inicial: Argentina completa en el área que no tapa el panel.
+  mapa.fitBounds([[-55.1, -73.6], [-21.8, -53.6]], { paddingBottomRight: [0, esMovil() ? ALTO_MIN : 0] });
 
   $("#panel").addEventListener("click", e => {
     const ir = e.target.closest("[data-ir]");

@@ -73,10 +73,10 @@ input, select, textarea {
 .marca { font-size: 18px; margin: 0; display: flex; align-items: center; gap: 8px; white-space: nowrap; }
 .buscador { display: flex; gap: 6px; flex: 1; min-width: 220px; }
 .buscador input { border: 0; }
-.buscador button, .acciones button { background: rgba(255,255,255,.14); color: #fff; border-color: rgba(255,255,255,.3); white-space: nowrap; }
-.acciones { display: flex; gap: 8px; align-items: center; }
-.fecha { display: flex; align-items: center; gap: 6px; font-size: 13px; }
-.fecha input { width: auto; border: 0; }
+.buscador button, .btn-ubicacion { background: rgba(255,255,255,.14); color: #fff; border-color: rgba(255,255,255,.3); white-space: nowrap; }
+.barra-fecha { padding: 8px 16px; border-bottom: 1px solid var(--borde); font-size: 13px; color: var(--suave); }
+.barra-fecha label { display: flex; align-items: center; gap: 8px; }
+.barra-fecha input { width: auto; padding: 3px 6px; }
 
 /* Mapa + panel */
 .contenido { flex: 1; display: flex; min-height: 0; position: relative; }
@@ -178,25 +178,38 @@ ul { margin: 2px 0; padding-left: 20px; }
 }
 .toast.visible { opacity: 1; transform: translate(-50%, 0); }
 
-/* Móvil: panel como hoja inferior */
+/* Móvil: mapa a pantalla completa y panel como hoja inferior deslizable.
+   La altura del panel la fija app.js según el estado (min / medio / max). */
 @media (max-width: 820px) {
-  .barra { padding: 6px 10px; gap: 6px; }
-  .marca { font-size: 16px; }
-  .buscador { order: 3; flex-basis: 100%; }
-  .acciones { margin-left: auto; }
-  .acciones button { padding: 5px 8px; font-size: 13px; }
-  .fecha span { display: none; }
-  .pestanas button { font-size: 13px; white-space: nowrap; }
-  .contenido { flex-direction: column; }
+  .barra { padding: 6px 8px; gap: 6px; flex-wrap: nowrap; }
+  .marca span, .btn-ubicacion span { display: none; }
+  .buscador { min-width: 0; }
+  .buscador button { display: none; }
+  .btn-ubicacion { font-size: 18px; padding: 4px 10px; }
+  .contenido { overflow: hidden; }
+  #mapa { position: absolute; inset: 0; }
   .panel {
     position: absolute; left: 0; right: 0; bottom: 0; width: auto; z-index: 1000;
-    height: 36vh; border-left: 0; border-top: 1px solid var(--borde);
+    height: 96px; border-left: 0; border-top: 1px solid var(--borde);
     border-radius: 16px 16px 0 0; box-shadow: 0 -6px 20px rgba(0,0,0,.18);
-    transition: height .25s;
+    transition: height .25s ease;
   }
-  .panel.abierto { height: 68vh; }
-  .asa { display: block; border: 0; background: none; padding: 8px 0 2px; width: 100%; }
-  .asa::before { content: ""; display: block; margin: 0 auto; width: 44px; height: 5px; border-radius: 3px; background: var(--borde); }
+  .panel.arrastrando { transition: none; }
+  .asa {
+    display: block; border: 0; background: none; padding: 8px 0 4px; width: 100%;
+    touch-action: none; cursor: grab;
+  }
+  .asa::before { content: ""; display: block; margin: 0 auto; width: 44px; height: 5px; border-radius: 3px; background: var(--suave); opacity: .5; }
+  .asa-texto { display: block; font-size: 11.5px; color: var(--suave); margin-top: 4px; }
+  .panel:not([data-estado="min"]) .asa-texto { display: none; }
+  .pestanas { touch-action: none; }
+  .pestanas button { font-size: 13px; white-space: nowrap; padding: 8px 2px; }
+  .panel[data-estado="min"] .barra-fecha,
+  .panel[data-estado="min"] .tab,
+  .panel[data-estado="min"] .aviso { visibility: hidden; }
+  .panel:not([data-estado="max"]) .aviso { display: none; }
+  .tab { padding-bottom: calc(20px + env(safe-area-inset-bottom)); }
   .grilla-actual { grid-template-columns: repeat(2, 1fr); }
-  .leaflet-bottom { bottom: 36vh; }
+  .leaflet-bottom { bottom: var(--alto-panel, 96px); transition: bottom .25s ease; }
+  .toast { bottom: auto; top: 64px; transform: translate(-50%, -20px); }
 }
