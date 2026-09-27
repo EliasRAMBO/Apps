@@ -532,7 +532,7 @@
   // Panel inferior en celular: "min" deja el mapa casi completo a la vista,
   // "medio" muestra mapa y detalle, "max" prioriza el detalle.
   const esMovil = () => window.matchMedia("(max-width: 820px)").matches;
-  const ALTO_MIN = 96;
+  const ALTO_MIN = 60;
   let panelEstado = "min";
 
   function altoPanel(est) {

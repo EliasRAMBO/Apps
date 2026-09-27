@@ -26,7 +26,7 @@
     <div id="mapa" aria-label="Mapa"></div>
 
     <aside id="panel" class="panel">
-      <button id="asa" class="asa" type="button" aria-label="Expandir o contraer panel"><span class="asa-texto">Toque el mapa · deslice para ver detalles</span></button>
+      <button id="asa" class="asa" type="button" aria-label="Expandir o contraer panel"></button>
       <nav class="pestanas" role="tablist">
         <button role="tab" data-tab="lugar" class="activa">Lugar</button>
         <button role="tab" data-tab="clima">Clima · Luna</button>
@@ -43,6 +43,10 @@
           <p class="nota">Los círculos del mapa son zonas de pesca conocidas: azul = agua dulce, verde agua = mar.</p>
         </div>
         <div id="lugar"></div>
+        <p class="aviso">
+        Datos orientativos. Vedas, cupos, tallas mínimas y licencias varían por provincia y temporada: verifique la normativa oficial antes de pescar.
+        Clima: <a href="https://open-meteo.com" target="_blank" rel="noopener">Open-Meteo</a>. Mapas: © OpenStreetMap, Esri.
+      </p>
       </section>
 
       <section id="tab-clima" class="tab" role="tabpanel">
@@ -85,10 +89,6 @@
         <div id="lista-reportes"></div>
       </section>
 
-      <footer class="aviso">
-        Datos orientativos. Vedas, cupos, tallas mínimas y licencias varían por provincia y temporada: verifique la normativa oficial antes de pescar.
-        Clima: <a href="https://open-meteo.com" target="_blank" rel="noopener">Open-Meteo</a>. Mapas: © OpenStreetMap, Esri.
-      </footer>
     </aside>
   </main>
 
