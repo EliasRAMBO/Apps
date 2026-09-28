@@ -1,0 +1,374 @@
+{
+ "dorado": {
+  "archivo": "dorado.webp",
+  "credito": {
+   "autor": "facundo cortondo",
+   "licencia": "CC BY",
+   "url": "https://www.inaturalist.org/observations/102842471",
+   "fuente": "iNaturalist",
+   "foto": 171998912,
+   "taxon": "Salminus brasiliensis"
+  }
+ },
+ "pacu": {
+  "archivo": "pacu.webp",
+  "credito": {
+   "autor": "EmhartVuletich",
+   "licencia": "CC BY-NC",
+   "url": "https://www.inaturalist.org/observations/364100788",
+   "fuente": "iNaturalist",
+   "foto": 664666128,
+   "taxon": "Piaractus mesopotamicus"
+  },
+  "ancho": 0.38,
+  "anchoCabeza": 0.4
+ },
+ "boga": {
+  "archivo": "boga.webp",
+  "credito": {
+   "autor": "demianlescano",
+   "licencia": "CC0",
+   "url": "https://www.inaturalist.org/observations/188080099",
+   "fuente": "iNaturalist",
+   "foto": 329069990,
+   "taxon": "Megaleporinus obtusidens"
+  }
+ },
+ "pejerrey": {
+  "archivo": "pejerrey.webp",
+  "credito": {
+   "autor": "Hugo Hulsberg",
+   "licencia": "CC0",
+   "url": "https://www.inaturalist.org/observations/65170016",
+   "fuente": "iNaturalist",
+   "foto": 104854137,
+   "taxon": "Odontesthes bonariensis"
+  },
+  "ancho": 0.55,
+  "anchoCabeza": 0.6
+ },
+ "tararira": {
+  "archivo": "tararira.webp",
+  "credito": {
+   "autor": "Gerry van Tonder",
+   "licencia": "CC BY",
+   "url": "https://www.inaturalist.org/observations/28822503",
+   "fuente": "iNaturalist",
+   "foto": 44953417,
+   "taxon": "Hoplias malabaricus"
+  },
+  "ancho": 0.65,
+  "anchoCabeza": 0.8
+ },
+ "armado": {
+  "archivo": "armado.webp",
+  "credito": {
+   "autor": "Johann Natterer",
+   "licencia": "Public domain",
+   "url": "https://commons.wikimedia.org/wiki/File:Johann_Natterer_-_Abotoado_(Pterodoras_granulosus).jpg",
+   "fuente": "Wikimedia Commons",
+   "foto": "wm5513563",
+   "tipo": "lámina científica"
+  },
+  "ancho": 0.6,
+  "anchoCabeza": 1.0
+ },
+ "pati": {
+  "archivo": "pati.webp",
+  "credito": {
+   "autor": "Federico Muñoz",
+   "licencia": "CC0",
+   "url": "https://www.inaturalist.org/observations/79852327",
+   "fuente": "iNaturalist",
+   "foto": 130821267,
+   "taxon": "Luciopimelodus pati"
+  },
+  "ancho": 0.6,
+  "anchoCabeza": 1.1
+ },
+ "palometa": {
+  "archivo": "palometa.webp",
+  "credito": {
+   "autor": "Vincent A. Vos",
+   "licencia": "CC BY",
+   "url": "https://www.inaturalist.org/observations/170674856",
+   "fuente": "iNaturalist",
+   "foto": 296041618,
+   "taxon": "Pygocentrus nattereri"
+  },
+  "ancho": 0.38,
+  "anchoCabeza": 0.4
+ },
+ "trucha": {
+  "archivo": "trucha.webp",
+  "credito": {
+   "autor": "Scott Loarie",
+   "licencia": "CC0",
+   "url": "https://www.inaturalist.org/observations/2714093",
+   "fuente": "iNaturalist",
+   "foto": 3059776,
+   "taxon": "Oncorhynchus mykiss"
+  }
+ },
+ "truchaMarron": {
+  "archivo": "truchaMarron.webp",
+  "credito": {
+   "autor": "Simon Tonge",
+   "licencia": "CC0",
+   "url": "https://www.inaturalist.org/observations/14789281",
+   "fuente": "iNaturalist",
+   "foto": 22072362,
+   "taxon": "Salmo trutta"
+  }
+ },
+ "perca": {
+  "archivo": "perca.webp",
+  "credito": {
+   "autor": "Nicolas Olejnik",
+   "licencia": "CC BY",
+   "url": "https://www.inaturalist.org/observations/1098494",
+   "fuente": "iNaturalist",
+   "foto": 1380559,
+   "taxon": "Percichthys trucha"
+  }
+ },
+ "pejerreyPatagonico": {
+  "archivo": "pejerreyPatagonico.webp",
+  "credito": {
+   "autor": "Valentín Alfano",
+   "licencia": "CC BY",
+   "url": "https://www.inaturalist.org/observations/259312509",
+   "fuente": "iNaturalist",
+   "foto": 465465013,
+   "taxon": "Odontesthes hatcheri"
+  },
+  "ancho": 0.55,
+  "anchoCabeza": 0.6
+ },
+ "salmonEncerrado": {
+  "archivo": "salmonEncerrado.webp",
+  "credito": {
+   "autor": "Olly Morgan",
+   "licencia": "CC0",
+   "url": "https://www.inaturalist.org/observations/94016156",
+   "fuente": "iNaturalist",
+   "foto": 155902183,
+   "taxon": "Salmo salar"
+  }
+ },
+ "corvinaRubia": {
+  "archivo": "corvinaRubia.webp",
+  "credito": {
+   "autor": "vinicius_s_domingues",
+   "licencia": "CC BY",
+   "url": "https://www.inaturalist.org/observations/113479203",
+   "fuente": "iNaturalist",
+   "foto": 191704400,
+   "taxon": "Micropogonias furnieri"
+  },
+  "ancho": 0.45
+ },
+ "corvinaNegra": {
+  "archivo": "corvinaNegra.webp",
+  "credito": {
+   "autor": "fattigatti",
+   "licencia": "CC BY-NC",
+   "url": "https://www.inaturalist.org/observations/20970594",
+   "fuente": "iNaturalist",
+   "foto": 32381449,
+   "taxon": "Pogonias courbina"
+  },
+  "ancho": 0.45
+ },
+ "pescadilla": {
+  "archivo": "pescadilla.webp",
+  "credito": {
+   "autor": "RAP",
+   "licencia": "CC BY",
+   "url": "https://www.inaturalist.org/observations/390279083",
+   "fuente": "iNaturalist",
+   "foto": 714987425,
+   "taxon": "Cynoscion guatucupa"
+  },
+  "ancho": 0.45
+ },
+ "anchoa": {
+  "archivo": "anchoa.webp",
+  "credito": {
+   "autor": "Martin Scheuch",
+   "licencia": "CC BY",
+   "url": "https://www.inaturalist.org/observations/229097655",
+   "fuente": "iNaturalist",
+   "foto": 406671417,
+   "taxon": "Pomatomus saltatrix"
+  }
+ },
+ "brotola": {
+  "archivo": "brotola.webp",
+  "credito": {
+   "autor": "Martin",
+   "licencia": "CC0",
+   "url": "https://www.inaturalist.org/observations/67545763",
+   "fuente": "iNaturalist",
+   "foto": 109156060,
+   "taxon": "Urophycis brasiliensis"
+  },
+  "ancho": 0.6,
+  "anchoCabeza": 0.7
+ },
+ "lenguado": {
+  "archivo": "lenguado.webp",
+  "credito": {
+   "autor": "Gonzalo Diaz",
+   "licencia": "CC BY-NC",
+   "url": "https://www.inaturalist.org/observations/191794846",
+   "fuente": "iNaturalist",
+   "foto": 336552955,
+   "taxon": "Paralichthys orbignyanus"
+  },
+  "ancho": 0.22,
+  "anchoCabeza": 0.22,
+  "plano": true
+ },
+ "pejerreyMar": {
+  "archivo": "pejerreyMar.webp",
+  "credito": {
+   "autor": "Michelle Delaloye",
+   "licencia": "CC BY-NC",
+   "url": "https://www.inaturalist.org/observations/115811364",
+   "fuente": "iNaturalist",
+   "foto": 195457371,
+   "taxon": "Odontesthes argentinensis"
+  },
+  "ancho": 0.55,
+  "anchoCabeza": 0.6
+ },
+ "tiburones": {
+  "archivo": "tiburones.webp",
+  "credito": {
+   "autor": "Bryce Watts-Parker",
+   "licencia": "CC BY",
+   "url": "https://www.inaturalist.org/observations/381250416",
+   "fuente": "iNaturalist",
+   "foto": 697577135,
+   "taxon": "Carcharias taurus"
+  },
+  "ancho": 0.85,
+  "anchoCabeza": 0.9
+ },
+ "gatuzo": {
+  "archivo": "gatuzo.webp",
+  "credito": {
+   "autor": "Pablo Fraire",
+   "licencia": "CC BY-NC",
+   "url": "https://www.inaturalist.org/observations/135583217",
+   "fuente": "iNaturalist",
+   "foto": 231265504,
+   "taxon": "Mustelus schmitti"
+  },
+  "ancho": 0.85,
+  "anchoCabeza": 0.9
+ },
+ "lisa": {
+  "archivo": "lisa.webp",
+  "credito": {
+   "autor": "Julia Mantinian",
+   "licencia": "CC BY-NC",
+   "url": "https://www.inaturalist.org/observations/136554503",
+   "fuente": "iNaturalist",
+   "foto": 233076247,
+   "taxon": "Mugil liza"
+  },
+  "ancho": 0.65,
+  "anchoCabeza": 0.75
+ },
+ "salmonMar": {
+  "archivo": "salmonMar.webp",
+  "credito": {
+   "autor": "Daniel Fernando Vidal",
+   "licencia": "CC BY-NC",
+   "url": "https://www.inaturalist.org/observations/266116952",
+   "fuente": "iNaturalist",
+   "foto": 478105426,
+   "taxon": "Pseudopercis semifasciata"
+  },
+  "ancho": 0.6,
+  "anchoCabeza": 0.7
+ },
+ "robalo": {
+  "archivo": "robalo.webp",
+  "credito": {
+   "autor": "Ursula Fraunschiel",
+   "licencia": "CC BY-NC",
+   "url": "https://www.inaturalist.org/observations/192462612",
+   "fuente": "iNaturalist",
+   "foto": 337868150,
+   "taxon": "Eleginops maclovinus"
+  },
+  "ancho": 0.55
+ },
+ "pezPalo": {
+  "archivo": "pezPalo.webp",
+  "credito": {
+   "autor": "Caio Henrique Cutrim",
+   "licencia": "CC BY-NC",
+   "url": "https://www.inaturalist.org/observations/281161425",
+   "fuente": "iNaturalist",
+   "foto": 505044845,
+   "taxon": "Percophis brasiliensis"
+  },
+  "ancho": 0.8,
+  "anchoCabeza": 1.0
+ },
+ "bagre": {
+  "archivo": "bagre.webp",
+  "credito": {
+   "autor": "Abril Bastons",
+   "licencia": "CC BY",
+   "url": "https://www.inaturalist.org/observations/105393517",
+   "fuente": "iNaturalist",
+   "foto": 176824525,
+   "taxon": "Pimelodus maculatus"
+  },
+  "ancho": 0.6,
+  "anchoCabeza": 1.0
+ },
+ "mero": {
+  "archivo": "mero.webp",
+  "credito": {
+   "autor": "Simón Pla García",
+   "licencia": "CC BY-NC",
+   "url": "https://www.inaturalist.org/observations/388365094",
+   "fuente": "iNaturalist",
+   "foto": 711277067,
+   "taxon": "Acanthistius patachonicus"
+  },
+  "ancho": 0.6,
+  "anchoCabeza": 0.7
+ },
+ "carpa": {
+  "archivo": "carpa.webp",
+  "credito": {
+   "autor": "Quinn",
+   "licencia": "CC BY",
+   "url": "https://www.inaturalist.org/observations/299727164",
+   "fuente": "iNaturalist",
+   "foto": 539999765,
+   "taxon": "Cyprinus carpio"
+  },
+  "ancho": 0.55,
+  "anchoCabeza": 0.6
+ },
+ "surubi": {
+  "archivo": "surubi.webp",
+  "credito": {
+   "autor": "Pablo Scarabotti, Tzipe Govezensky, Pablo Bolcatto & Raf",
+   "licencia": "CC BY 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Pseudoplatystoma_corruscans_RIP.png",
+   "fuente": "Wikimedia Commons",
+   "foto": "wm163947220"
+  },
+  "ancho": 0.7,
+  "anchoCabeza": 1.3
+ }
+}

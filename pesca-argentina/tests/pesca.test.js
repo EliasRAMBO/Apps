@@ -106,3 +106,48 @@ test("mareas: detecta pleamar y bajamar", () => {
   const m = Clima.mareas(horas, [0, 1, 0.5, -1, -0.5, 0]);
   assert.deepStrictEqual(m.map(x => x.tipo), ["Pleamar", "Bajamar"]);
 });
+
+// ---------------- Modelos 3D a partir de fotos ----------------
+test("la transformada de distancia y el radio local miden bien un rectángulo", async () => {
+  const m = await import("../js/pecesFoto.js");
+  const W = 9, H = 7, dentro = new Uint8Array(W * H);
+  for (let y = 1; y < H - 1; y++) for (let x = 1; x < W - 1; x++) dentro[y * W + x] = 1;
+  const d = m.distanciaAlBorde(dentro, W, H);
+  assert.strictEqual(d[3 * W + 4], 3, "centro a 3 celdas del borde");
+  assert.strictEqual(d[1 * W + 1], 1, "esquina interior a 1 celda");
+  assert.strictEqual(d[0], 0, "fuera vale 0");
+  const R = m.radioLocal(d, W, H);
+  assert.strictEqual(R[3 * W + 4], 3);
+  assert.strictEqual(R[1 * W + 1], 3, "la esquina la cubre el disco mayor");
+});
+
+test("la silueta inflada da una malla cerrada con grosor acotado", async () => {
+  const m = await import("../js/pecesFoto.js");
+  const W = 42, H = 22, dentro = new Uint8Array(W * H), alfa = new Float32Array(W * H);
+  for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
+    const e = Math.hypot((x - 20) / 18, (y - 10) / 8); // elipse
+    dentro[y * W + x] = e < 1 ? 1 : 0; alfa[y * W + x] = e < 1 ? 1 : 0;
+  }
+  const g = m.geometriaInflada({ W, H, dentro, alfa }, { ancho: 0.5, anchoCabeza: 0.5, aletas: 0.3 });
+  const pos = g.getAttribute("position"), idx = g.getIndex();
+  assert.ok(pos.count > 100 && idx.count % 3 === 0);
+  let zMax = 0;
+  for (let i = 0; i < pos.count; i++) {
+    assert.ok(idx.array.every(k => k < pos.count));
+    zMax = Math.max(zMax, Math.abs(pos.getZ(i)));
+  }
+  const esc = 2 / (W - 2), altoMedio = 8 * esc;
+  assert.ok(zMax > 0.2 * altoMedio && zMax <= 0.5 * altoMedio + 1e-6, `grosor máximo ${zMax} vs media altura ${altoMedio}`);
+});
+
+test("el catálogo de modelos fotográficos apunta a especies y archivos existentes con crédito", () => {
+  const dir = path.join(__dirname, "../modelos");
+  const cat = JSON.parse(fs.readFileSync(path.join(dir, "modelos.json"), "utf8"));
+  assert.ok(Object.keys(cat).length >= 20, "faltan modelos");
+  for (const [id, m] of Object.entries(cat)) {
+    assert.ok(ESPECIES[id], `${id}: especie inexistente`);
+    assert.ok(fs.existsSync(path.join(dir, m.archivo)), `${id}: falta ${m.archivo}`);
+    for (const k of ["autor", "licencia", "url", "fuente"]) assert.ok(m.credito && m.credito[k], `${id}: crédito sin ${k}`);
+    assert.ok(/^CC|^Public domain/i.test(m.credito.licencia), `${id}: licencia ${m.credito.licencia}`);
+  }
+});

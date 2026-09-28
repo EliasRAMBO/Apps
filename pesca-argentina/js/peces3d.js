@@ -4,6 +4,7 @@
  * No son reproducciones exactas: muestran forma, aletas y patrón de color típicos.
  */
 import * as THREE from "../vendor/three/three.min.js";
+import { crearPezFoto } from "./pecesFoto.js";
 
 // ---------------- Formas por especie ----------------
 // Cuerpo: h = media altura máx., pos = posición de la altura máx. (0 cola, 1 hocico),
@@ -462,11 +463,23 @@ function crearPez(id, reloj) {
 }
 
 // ---------------- Visor ----------------
-let visor = null;
+let visor = null, secuencia = 0;
 
-export function abrirVisor(contenedor, id) {
+/**
+ * Abre el visor en el contenedor. Usa el modelo fotográfico si existe
+ * (modelos/<id>.webp) y, si no, el ilustrativo generado por código.
+ * Devuelve { tipo: "foto" | "ilustrativo", credito }.
+ */
+export async function abrirVisor(contenedor, id) {
   cerrarVisor();
-  const reloj = { value: 0 };
+  const pedido = ++secuencia, reloj = { value: 0 };
+  let pez, credito = null, tipo = "ilustrativo";
+  try {
+    const foto = await crearPezFoto(id, reloj);
+    if (foto) { pez = foto.grupo; credito = foto.credito; tipo = "foto"; }
+  } catch (e) { /* sin foto: modelo ilustrativo */ }
+  if (pedido !== secuencia) return { tipo: "cancelado", credito: null }; // se abrió otro mientras cargaba
+  if (!pez) pez = crearPez(id, reloj);
   const escena = new THREE.Scene();
   escena.background = new THREE.Color(getComputedStyle(document.documentElement).getPropertyValue("--fondo-3d").trim() || "#0e2a33");
   const camara = new THREE.PerspectiveCamera(35, 1, 0.05, 50);
@@ -481,7 +494,6 @@ export function abrirVisor(contenedor, id) {
   const sol = new THREE.DirectionalLight("#ffffff", 2.2); sol.position.set(2, 3, 4); escena.add(sol);
   const contra = new THREE.DirectionalLight("#9fd3ff", 1.0); contra.position.set(-3, 1, -3); escena.add(contra);
 
-  const pez = crearPez(id, reloj);
   const pivote = new THREE.Group(); pivote.add(pez); escena.add(pivote);
   pivote.rotation.y = -0.5;
 
@@ -533,6 +545,7 @@ export function abrirVisor(contenedor, id) {
       render.dispose(); cv.remove();
     }
   };
+  return { tipo, credito };
 }
 
 export function cerrarVisor() {

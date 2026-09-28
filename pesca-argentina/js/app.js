@@ -712,13 +712,18 @@
     if (!esp) return;
     $("#visor-titulo").textContent = esp.nombre;
     $("#visor-lienzo").innerHTML = "<span>Cargando modelo 3D…</span>";
+    $("#visor-nota").textContent = "Arrastre para girar; pellizque o use la rueda para acercar.";
     $("#visor-foto").innerHTML = "";
     $("#visor3d").hidden = false;
     cargarFoto(id);
     try {
       visor3d = visor3d || await import(new URL("js/peces3d.js", document.baseURI).href);
       if ($("#visor3d").hidden) return;
-      visor3d.abrirVisor($("#visor-lienzo"), id);
+      const r = await visor3d.abrirVisor($("#visor-lienzo"), id);
+      if (r.tipo === "cancelado" || $("#visor3d").hidden) return;
+      $("#visor-nota").innerHTML = r.tipo === "foto"
+        ? `Modelo 3D construido a partir de una ${r.credito && r.credito.tipo ? esc(r.credito.tipo) : "foto real"}${r.credito ? ` de ${esc(r.credito.autor)} (<a href="${esc(r.credito.url)}" target="_blank" rel="noopener">${esc(r.credito.fuente || "iNaturalist")}</a>, licencia ${esc(r.credito.licencia)})` : ""}. El lado no fotografiado se muestra espejado. Arrastre para girar; pellizque o use la rueda para acercar.`
+        : "Modelo 3D ilustrativo generado por la app: forma, aletas y colores típicos, no a escala. Arrastre para girar; pellizque o use la rueda para acercar.";
     } catch (e) {
       $("#visor-lienzo").innerHTML = "<span>No se pudo mostrar el modelo 3D en este dispositivo.</span>";
     }

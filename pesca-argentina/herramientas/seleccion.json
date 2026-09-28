@@ -1,0 +1,155 @@
+{
+ "dorado": {
+  "foto": "171998912"
+ },
+ "pacu": {
+  "foto": "664666128",
+  "voltear": true,
+  "ancho": 0.38,
+  "anchoCabeza": 0.4
+ },
+ "boga": {
+  "foto": "329069990",
+  "voltear": true
+ },
+ "pejerrey": {
+  "foto": "104854137",
+  "voltear": true,
+  "ancho": 0.55,
+  "anchoCabeza": 0.6
+ },
+ "tararira": {
+  "foto": "44953417",
+  "voltear": true,
+  "ancho": 0.65,
+  "anchoCabeza": 0.8
+ },
+ "armado": {
+  "foto": "wm5513563",
+  "ancho": 0.6,
+  "anchoCabeza": 1.0,
+  "tipo": "lámina científica"
+ },
+ "pati": {
+  "foto": "130821267",
+  "voltear": true,
+  "ancho": 0.6,
+  "anchoCabeza": 1.1
+ },
+ "palometa": {
+  "foto": "296041618",
+  "voltear": true,
+  "ancho": 0.38,
+  "anchoCabeza": 0.4
+ },
+ "trucha": {
+  "foto": "3059776"
+ },
+ "truchaMarron": {
+  "foto": "22072362",
+  "voltear": true
+ },
+ "perca": {
+  "foto": "1380559"
+ },
+ "pejerreyPatagonico": {
+  "foto": "465465013",
+  "voltear": true,
+  "ancho": 0.55,
+  "anchoCabeza": 0.6
+ },
+ "salmonEncerrado": {
+  "foto": "155902183",
+  "voltear": true
+ },
+ "corvinaRubia": {
+  "foto": "191704400",
+  "voltear": true,
+  "ancho": 0.45
+ },
+ "corvinaNegra": {
+  "foto": "32381449",
+  "ancho": 0.45
+ },
+ "pescadilla": {
+  "foto": "714987425",
+  "ancho": 0.45
+ },
+ "anchoa": {
+  "foto": "406671417"
+ },
+ "brotola": {
+  "foto": "109156060",
+  "voltear": true,
+  "ancho": 0.6,
+  "anchoCabeza": 0.7
+ },
+ "lenguado": {
+  "foto": "336552955",
+  "voltear": true,
+  "ancho": 0.22,
+  "anchoCabeza": 0.22,
+  "plano": true
+ },
+ "pejerreyMar": {
+  "foto": "195457371",
+  "voltear": true,
+  "ancho": 0.55,
+  "anchoCabeza": 0.6
+ },
+ "tiburones": {
+  "foto": "697577135",
+  "voltear": true,
+  "ancho": 0.85,
+  "anchoCabeza": 0.9
+ },
+ "gatuzo": {
+  "foto": "231265504",
+  "ancho": 0.85,
+  "anchoCabeza": 0.9
+ },
+ "lisa": {
+  "foto": "233076247",
+  "ancho": 0.65,
+  "anchoCabeza": 0.75
+ },
+ "salmonMar": {
+  "foto": "478105426",
+  "voltear": true,
+  "ancho": 0.6,
+  "anchoCabeza": 0.7
+ },
+ "robalo": {
+  "foto": "337868150",
+  "ancho": 0.55
+ },
+ "pezPalo": {
+  "foto": "505044845",
+  "voltear": true,
+  "ancho": 0.8,
+  "anchoCabeza": 1.0
+ },
+ "bagre": {
+  "foto": "176824525",
+  "voltear": true,
+  "ancho": 0.6,
+  "anchoCabeza": 1.0
+ },
+ "mero": {
+  "foto": "711277067",
+  "ancho": 0.6,
+  "anchoCabeza": 0.7
+ },
+ "carpa": {
+  "foto": "539999765",
+  "voltear": true,
+  "ancho": 0.55,
+  "anchoCabeza": 0.6
+ },
+ "surubi": {
+  "foto": "wm163947220",
+  "voltear": true,
+  "ancho": 0.7,
+  "anchoCabeza": 1.3
+ }
+}

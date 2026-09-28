@@ -15,8 +15,11 @@ temperatura del agua.
   OpenStreetMap para saber si es un lago, embalse, río o bañado, y se muestra una
   **estimación regional** (Pampa, Litoral, Centro, NOA, Cuyo, Patagonia, Tierra del
   Fuego o mar) claramente señalada como tal.
-- **Modelos 3D** ilustrativos de cada especie (se pueden girar y acercar) y **foto real**
-  tomada de Wikipedia.
+- **Modelos 3D de cada especie construidos a partir de una foto real** con licencia libre
+  (iNaturalist o Wikimedia Commons): la app recorta la silueta, la "infla" y proyecta la
+  foto como piel. Se pueden girar y acercar; se muestra el crédito del autor. Si una
+  especie no tiene foto, se usa un modelo ilustrativo generado por código. Debajo se
+  muestra además una foto de Wikipedia.
 - Por especie: mejores meses, horario y lugar, carnadas, señuelos, métodos, equipo
   sugerido y notas de normativa.
 - **Clima** (Open-Meteo): condiciones actuales y pronóstico de 7 días con tendencia de
@@ -54,6 +57,30 @@ funciona siempre.
 npm test
 ```
 
+## Modelos 3D a partir de fotos
+
+Las fotos de `modelos/` se obtuvieron con los scripts de `herramientas/`:
+
+1. `bajar.py` baja candidatas de iNaturalist (observaciones con grado de investigación
+   y licencia CC); `bajar_commons.py` hace lo mismo en Wikimedia Commons.
+2. `recortar.py` quita el fondo con [rembg](https://github.com/danielgatis/rembg) y arma
+   una hoja de contactos para elegir la mejor foto de costado.
+3. `seleccion.json` guarda la foto elegida por especie, si hay que voltearla (la cabeza
+   va a la derecha) y el grosor relativo del cuerpo y la cabeza.
+4. `exportar.py` nivela, recorta y guarda cada foto como `.webp` con transparencia y
+   escribe `modelos.json` con el crédito (autor, licencia y enlace).
+
+Requiere `pip install "rembg[cpu]" pillow numpy opencv-python-headless scipy`.
+
+En el navegador, `js/pecesFoto.js` lee la silueta (canal alfa), calcula la distancia al
+borde y el radio del mayor disco inscripto en cada punto, y con eso da grosor al cuerpo
+y deja finas las aletas. El lado no fotografiado se muestra espejado. El armado usa una
+lámina científica de Johann Natterer (dominio público) por falta de fotos laterales
+libres.
+
+Licencias: la mayoría de las fotos son CC0, CC BY o CC BY-SA; algunas son CC BY-NC (uso
+no comercial). Los créditos están en `modelos/modelos.json` y se muestran en el visor.
+
 ## Limitaciones
 
 - **Foros**: la app no descarga ni analiza contenido de foros automáticamente (los
@@ -79,6 +106,9 @@ js/clima.js           Open-Meteo (pronóstico y datos marinos)
 js/app.js             Mapa, panel, reportes
 js/config.js          Clave opcional de Google Maps
 sw.js                 Service worker (uso sin conexión de la interfaz)
-js/peces3d.js         Modelos 3D generados por código (Three.js)
+js/peces3d.js         Visor 3D y modelos ilustrativos generados por código (Three.js)
+js/pecesFoto.js       Modelos 3D a partir de la foto recortada (silueta inflada)
+modelos/              Fotos recortadas (.webp) y modelos.json con parámetros y créditos
+herramientas/         Scripts (Python) para bajar, recortar y exportar las fotos
 vendor/               Leaflet 1.9.4, SunCalc 1.9.0, GoogleMutant 0.14.1, Three.js 0.186 (reducido)
 ```
