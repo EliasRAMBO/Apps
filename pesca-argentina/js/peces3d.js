@@ -7,11 +7,12 @@ import * as THREE from "../vendor/three/three.min.js";
 
 // ---------------- Formas por especie ----------------
 // Cuerpo: h = media altura máx., pos = posición de la altura máx. (0 cola, 1 hocico),
-// ped = media altura del pedúnculo, b = afinamiento del hocico (<1 romo),
+// ped = media altura del pedúnculo, hocico = forma de la cabeza (1 = cónica,
+// 2 = redondeada, 3 = muy roma), boca = { s: altura, largo } de la comisura,
 // ancho / anchoCabeza = relación ancho/alto en el cuerpo y en la cabeza,
 // arriba / abajo = factor de la mitad dorsal y ventral.
 const BASE = {
-  h: 0.26, pos: 0.55, ped: 0.07, a: 1, b: 0.8, ancho: 0.5, anchoCabeza: 0.55, arriba: 1, abajo: 1,
+  h: 0.26, pos: 0.55, ped: 0.07, a: 1, hocico: 2, boca: { s: -0.05, largo: 0.05 }, operculo: 0.78, ancho: 0.5, anchoCabeza: 0.55, arriba: 1, abajo: 1,
   cola: { tipo: "horquillada", largo: 0.42, alto: 0.34 },
   dorsal: [{ u0: 0.45, u1: 0.62, alto: 0.2 }],
   adiposa: null,
@@ -25,12 +26,12 @@ const BASE = {
 
 const FORMAS = {
   dorado: {
-    h: 0.27, ancho: 0.45, colores: { lomo: "#8a6a18", flanco: "#e0a52a", vientre: "#f6e7a6", aletas: "#e8922a" },
+    h: 0.27, hocico: 1.6, ancho: 0.45, colores: { lomo: "#8a6a18", flanco: "#e0a52a", vientre: "#f6e7a6", aletas: "#e8922a" },
     adiposa: { u0: 0.2, u1: 0.26, alto: 0.05 },
     patrones: [{ tipo: "filas", color: "#3a2a0a", filas: [0.62, 0.4, 0.18, -0.04, -0.26], paso: 0.028, r: 0.012 }]
   },
   surubi: {
-    h: 0.15, pos: 0.7, b: 0.55, ancho: 0.9, anchoCabeza: 1.4, abajo: 0.8,
+    h: 0.15, pos: 0.7, hocico: 1.4, ancho: 0.9, anchoCabeza: 1.4, abajo: 0.8,
     colores: { lomo: "#4a4a45", flanco: "#8a8a80", vientre: "#f2f2ee", aletas: "#5e5e58" },
     dorsal: [{ u0: 0.55, u1: 0.65, alto: 0.18 }], adiposa: { u0: 0.18, u1: 0.34, alto: 0.05 },
     bigotes: { n: 6, largo: 0.45 },
@@ -38,13 +39,13 @@ const FORMAS = {
       { tipo: "puntos", color: "#1d1d1b", celda: 0.035, r: 0.28, sMin: -0.1 }]
   },
   pacu: {
-    h: 0.45, pos: 0.5, b: 0.7, ancho: 0.35, anchoCabeza: 0.4,
+    h: 0.45, pos: 0.5, hocico: 2.3, ancho: 0.35, anchoCabeza: 0.4,
     colores: { lomo: "#35352f", flanco: "#6f6d66", vientre: "#d9b36a", aletas: "#44443e" },
     dorsal: [{ u0: 0.42, u1: 0.58, alto: 0.2 }], adiposa: { u0: 0.2, u1: 0.25, alto: 0.05 },
     anal: [{ u0: 0.12, u1: 0.34, alto: 0.12 }], cola: { tipo: "horquillada", largo: 0.34, alto: 0.4 }
   },
   palometa: {
-    h: 0.45, pos: 0.5, b: 0.65, ancho: 0.35, anchoCabeza: 0.45,
+    h: 0.45, pos: 0.5, hocico: 2.2, ancho: 0.35, anchoCabeza: 0.45,
     colores: { lomo: "#5f6a70", flanco: "#b9c2c6", vientre: "#d9542a", aletas: "#6a6a64" },
     dorsal: [{ u0: 0.42, u1: 0.56, alto: 0.18 }], adiposa: { u0: 0.2, u1: 0.25, alto: 0.04 },
     anal: [{ u0: 0.12, u1: 0.36, alto: 0.12 }], cola: { tipo: "truncada", largo: 0.3, alto: 0.36 },
@@ -56,7 +57,7 @@ const FORMAS = {
     patrones: [{ tipo: "manchas", color: "#3a3a30", lugares: [[0.22, 0.02], [0.44, 0.04], [0.66, 0.06]], r: 0.028 }]
   },
   pejerrey: {
-    h: 0.15, ancho: 0.6, colores: { lomo: "#6f8b8a", flanco: "#dfe8e6", vientre: "#f7fafa", aletas: "#c8d4d2" },
+    h: 0.15, hocico: 1.6, ancho: 0.6, colores: { lomo: "#6f8b8a", flanco: "#dfe8e6", vientre: "#f7fafa", aletas: "#c8d4d2" },
     dorsal: [{ u0: 0.55, u1: 0.62, alto: 0.08 }, { u0: 0.32, u1: 0.42, alto: 0.1 }],
     anal: [{ u0: 0.14, u1: 0.4, alto: 0.08 }],
     patrones: [{ tipo: "banda", s: 0.05, ancho: 0.08, color: "#f4fbfb", borde: "#7f9c9d" }]
@@ -91,29 +92,35 @@ const FORMAS = {
     patrones: [{ tipo: "oblicuas", color: "#6a5a30", frec: 38, ancho: 0.2, sMin: 0.0 }]
   },
   corvinaNegra: {
-    h: 0.32, ancho: 0.5, b: 0.7, colores: { lomo: "#2e2e2a", flanco: "#5a5a52", vientre: "#bdb8a8", aletas: "#3a3a36" },
+    h: 0.32, ancho: 0.5, hocico: 2.3, colores: { lomo: "#2e2e2a", flanco: "#5a5a52", vientre: "#bdb8a8", aletas: "#3a3a36" },
     dorsal: [{ u0: 0.5, u1: 0.64, alto: 0.2, espinosa: true }, { u0: 0.26, u1: 0.49, alto: 0.12 }],
     cola: { tipo: "truncada", largo: 0.32, alto: 0.3 }, bigotes: { n: 8, largo: 0.08, menton: true },
     patrones: [{ tipo: "barras", color: "#1a1a18", frec: 9, ancho: 0.3, sMin: -0.5 }]
   },
   pescadilla: {
-    h: 0.19, ancho: 0.5, colores: { lomo: "#6f7f7a", flanco: "#d7dcd6", vientre: "#f5f6f2", aletas: "#b8bfb2" },
+    h: 0.19, hocico: 1.7, ancho: 0.5, colores: { lomo: "#6f7f7a", flanco: "#d7dcd6", vientre: "#f5f6f2", aletas: "#b8bfb2" },
     dorsal: [{ u0: 0.52, u1: 0.62, alto: 0.14, espinosa: true }, { u0: 0.24, u1: 0.5, alto: 0.08 }],
     cola: { tipo: "truncada", largo: 0.34, alto: 0.26 }
   },
   anchoa: {
-    h: 0.22, ancho: 0.5, colores: { lomo: "#3f6a86", flanco: "#b8c8cc", vientre: "#f1f4f3", aletas: "#7f97a2" },
+    h: 0.22, hocico: 1.7, ancho: 0.5, colores: { lomo: "#3f6a86", flanco: "#b8c8cc", vientre: "#f1f4f3", aletas: "#7f97a2" },
     dorsal: [{ u0: 0.52, u1: 0.6, alto: 0.1 }, { u0: 0.26, u1: 0.48, alto: 0.12 }],
     cola: { tipo: "horquillada", largo: 0.5, alto: 0.4 }
   },
   brotola: {
-    h: 0.2, pos: 0.6, ancho: 0.5, colores: { lomo: "#6a5540", flanco: "#a88a64", vientre: "#e7dcc6", aletas: "#8a7050" },
-    dorsal: [{ u0: 0.63, u1: 0.7, alto: 0.12 }, { u0: 0.1, u1: 0.61, alto: 0.07 }],
-    anal: [{ u0: 0.1, u1: 0.46, alto: 0.07 }], cola: { tipo: "redondeada", largo: 0.3, alto: 0.2 },
-    bigotes: { n: 1, largo: 0.1, menton: true }
+    h: 0.19, pos: 0.62, hocico: 2.6, ancho: 0.55, anchoCabeza: 0.7, abajo: 0.95,
+    colores: { lomo: "#6b4a3c", flanco: "#c9a24e", vientre: "#e9dcae", aletas: "#6e5244" },
+    boca: { s: -0.02, largo: 0.09 }, operculo: 0.8,
+    ojo: { u: 0.9, s: 0.45, r: 0.04 },
+    dorsal: [{ u0: 0.66, u1: 0.71, alto: 0.08 }, { u0: 0.08, u1: 0.64, alto: 0.07 }],
+    filamentoDorsal: { u: 0.7, alto: 0.34 }, pelvica: 0, pelvicaFilamento: 0.32,
+    anal: [{ u0: 0.08, u1: 0.5, alto: 0.07 }], cola: { tipo: "redondeada", largo: 0.26, alto: 0.2 },
+    bigotes: { n: 1, largo: 0.08, menton: true },
+    patrones: [{ tipo: "banda", s: 0.12, ancho: 0.1, color: "#5a3a28" },
+      { tipo: "moteado", color: "#5a3a28", escala: 7, umbral: 0.68 }]
   },
   lenguado: {
-    h: 0.42, pos: 0.5, b: 0.7, ancho: 0.12, anchoCabeza: 0.15, plano: true,
+    h: 0.42, pos: 0.5, hocico: 2.3, ancho: 0.12, anchoCabeza: 0.15, plano: true,
     colores: { lomo: "#6b5a44", flanco: "#8f7a5e", vientre: "#8f7a5e", aletas: "#7a6850" },
     dorsal: [{ u0: 0.1, u1: 0.93, alto: 0.08 }], anal: [{ u0: 0.1, u1: 0.72, alto: 0.08 }],
     cola: { tipo: "redondeada", largo: 0.3, alto: 0.24 }, pectoral: 0.08, pelvica: 0.05,
@@ -122,7 +129,7 @@ const FORMAS = {
       { tipo: "puntos", color: "#e6dcc6", celda: 0.06, r: 0.14, sMin: -1 }]
   },
   tiburones: {
-    h: 0.15, pos: 0.55, b: 0.5, ancho: 0.75, anchoCabeza: 0.8,
+    h: 0.15, pos: 0.55, hocico: 1.3, ancho: 0.75, anchoCabeza: 0.8,
     colores: { lomo: "#6b6f6a", flanco: "#9a9e98", vientre: "#eceeea", aletas: "#6b6f6a" },
     dorsal: [{ u0: 0.48, u1: 0.62, alto: 0.24 }, { u0: 0.2, u1: 0.28, alto: 0.14 }],
     anal: [{ u0: 0.16, u1: 0.24, alto: 0.1 }], cola: { tipo: "heterocerca", largo: 0.6, alto: 0.34 },
@@ -130,7 +137,7 @@ const FORMAS = {
     patrones: [{ tipo: "puntos", color: "#4e524d", celda: 0.05, r: 0.16, sMin: 0.1 }]
   },
   gatuzo: {
-    h: 0.13, pos: 0.55, b: 0.55, ancho: 0.75, anchoCabeza: 0.8,
+    h: 0.13, pos: 0.55, hocico: 1.4, ancho: 0.75, anchoCabeza: 0.8,
     colores: { lomo: "#7a7f86", flanco: "#a4a9ae", vientre: "#eceeef", aletas: "#7a7f86" },
     dorsal: [{ u0: 0.48, u1: 0.6, alto: 0.16 }, { u0: 0.22, u1: 0.32, alto: 0.12 }],
     anal: [{ u0: 0.18, u1: 0.25, alto: 0.07 }], cola: { tipo: "heterocerca", largo: 0.5, alto: 0.24 },
@@ -138,7 +145,7 @@ const FORMAS = {
     patrones: [{ tipo: "puntos", color: "#e8ecef", celda: 0.05, r: 0.14, sMin: 0.2 }]
   },
   lisa: {
-    h: 0.19, ancho: 0.75, b: 0.7, colores: { lomo: "#4a5a5e", flanco: "#aab4b4", vientre: "#eef0ee", aletas: "#8a9696" },
+    h: 0.19, ancho: 0.75, hocico: 2.3, colores: { lomo: "#4a5a5e", flanco: "#aab4b4", vientre: "#eef0ee", aletas: "#8a9696" },
     dorsal: [{ u0: 0.55, u1: 0.62, alto: 0.1, espinosa: true }, { u0: 0.3, u1: 0.4, alto: 0.1 }],
     patrones: [{ tipo: "rayas", color: "#5a666a", filas: [0.22, 0.42, 0.62], ancho: 0.035 }]
   },
@@ -150,7 +157,7 @@ const FORMAS = {
       { tipo: "puntos", color: "#f2ead8", celda: 0.05, r: 0.1, sMin: 0 }]
   },
   mero: {
-    h: 0.3, b: 0.7, ancho: 0.5, colores: { lomo: "#7a4a30", flanco: "#b0704a", vientre: "#e8c9a8", aletas: "#8a5a3a" },
+    h: 0.3, hocico: 2.3, ancho: 0.5, colores: { lomo: "#7a4a30", flanco: "#b0704a", vientre: "#e8c9a8", aletas: "#8a5a3a" },
     dorsal: [{ u0: 0.42, u1: 0.66, alto: 0.18, espinosa: true }, { u0: 0.24, u1: 0.41, alto: 0.14 }],
     cola: { tipo: "truncada", largo: 0.3, alto: 0.28 },
     patrones: [{ tipo: "moteado", color: "#5a3420", escala: 8, umbral: 0.6 }]
@@ -161,7 +168,7 @@ const FORMAS = {
     cola: { tipo: "truncada", largo: 0.34, alto: 0.28 }
   },
   pezPalo: {
-    h: 0.1, pos: 0.6, b: 0.5, ancho: 0.7, anchoCabeza: 1.25,
+    h: 0.1, pos: 0.6, hocico: 1.3, ancho: 0.7, anchoCabeza: 1.25,
     colores: { lomo: "#8a7a60", flanco: "#c4b494", vientre: "#f1ece0", aletas: "#a08a68" },
     dorsal: [{ u0: 0.7, u1: 0.76, alto: 0.08, espinosa: true }, { u0: 0.14, u1: 0.62, alto: 0.06 }],
     anal: [{ u0: 0.12, u1: 0.55, alto: 0.05 }], cola: { tipo: "truncada", largo: 0.26, alto: 0.16 },
@@ -169,7 +176,7 @@ const FORMAS = {
     patrones: [{ tipo: "puntos", color: "#6a5a40", celda: 0.04, r: 0.2, sMin: -0.2 }]
   },
   tararira: {
-    h: 0.2, b: 0.6, ancho: 0.7, anchoCabeza: 0.8, colores: { lomo: "#3f4a2c", flanco: "#7c7a4a", vientre: "#e2dcc0", aletas: "#5a5a38" },
+    h: 0.2, hocico: 1.8, ancho: 0.7, anchoCabeza: 0.8, colores: { lomo: "#3f4a2c", flanco: "#7c7a4a", vientre: "#e2dcc0", aletas: "#5a5a38" },
     dorsal: [{ u0: 0.45, u1: 0.62, alto: 0.14 }], cola: { tipo: "redondeada", largo: 0.34, alto: 0.26 },
     ojo: { u: 0.86, s: 0.4, r: 0.04 },
     patrones: [{ tipo: "moteado", color: "#2a2a1a", escala: 10, umbral: 0.52 }]
@@ -213,7 +220,9 @@ function perfil(F) {
   // Media altura a lo largo del cuerpo (u: 0 = pedúnculo, 1 = hocico).
   return u => {
     if (u < F.pos) return F.ped + (F.h - F.ped) * Math.pow(Math.sin(Math.PI / 2 * u / F.pos), F.a);
-    return F.h * Math.pow(Math.max(0, Math.cos(Math.PI / 2 * (u - F.pos) / (1 - F.pos))), F.b);
+    // Cuarto de superelipse: termina con tangente vertical (cabeza redondeada).
+    const t = (u - F.pos) / (1 - F.pos);
+    return F.h * Math.pow(Math.max(0, 1 - Math.pow(t, F.hocico)), 1 / F.hocico);
   };
 }
 const anchoRel = (F, u) => F.ancho + (F.anchoCabeza - F.ancho) * u * u;
@@ -345,6 +354,10 @@ function textura(F) {
         }
         if (m > 0) col = mezcla(col, rgb(p.color), m);
       }
+      // Opérculo (borde de la agalla) y comisura de la boca.
+      const xOp = 2 * F.operculo + 0.06 * (s * s);
+      if (Math.abs(ex - xOp) < 0.012 && s > -0.85 && s < 0.75) col = mezcla(col, rgb(F.colores.lomo), 0.45);
+      if (u > 1 - F.boca.largo && Math.abs(s - F.boca.s) < 0.04) col = mezcla(col, [25, 20, 18], 0.85);
       // Brillo leve para aspecto húmedo.
       col = col.map(v => Math.min(255, v * (0.94 + 0.08 * ruido(u * 60, s * 20, 11))));
       const k = (j * W + i) * 4;
@@ -393,6 +406,7 @@ function crearPez(id, reloj) {
     pec.rotation.set(lado * 0.5, lado * 0.55, -0.35);
     grupo.add(pec);
     const upl = 0.5, hpl = H(upl);
+    if (!F.pelvica) return;
     const pel = new THREE.Mesh(aletaPar(F.pelvica), matAleta);
     pel.position.set(xDe(upl), -hpl * F.abajo * 0.85, lado * hpl * anchoRel(F, upl) * 0.4);
     pel.rotation.set(lado * 1.1, lado * 0.3, -0.5);
@@ -431,6 +445,17 @@ function crearPez(id, reloj) {
         inicio.clone().addScaledVector(dir, largo).add(new THREE.Vector3(-largo * 0.3, -largo * 0.25, 0))]);
       grupo.add(new THREE.Mesh(new THREE.TubeGeometry(curva, 12, 0.007, 5, false), matB));
     }
+  }
+  // Filamentos: radio largo de la 1.ª dorsal y aletas pélvicas en hilo.
+  const matFil = new THREE.MeshStandardMaterial({ color: F.colores.aletas, roughness: 0.6 });
+  const hilo = (puntos, grosor) => grupo.add(new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(puntos), 16, grosor, 5, false), matFil));
+  if (F.filamentoDorsal) {
+    const { u, alto } = F.filamentoDorsal, x = xDe(u), y = H(u) * F.arriba * 0.95;
+    hilo([new THREE.Vector3(x, y, 0), new THREE.Vector3(x - alto * 0.15, y + alto * 0.6, 0), new THREE.Vector3(x - alto * 0.5, y + alto, 0)], 0.008);
+  }
+  if (F.pelvicaFilamento) {
+    const u = 0.8, x = xDe(u), y = -H(u) * F.abajo * 0.9, L = F.pelvicaFilamento;
+    [1, -1].forEach(l => hilo([new THREE.Vector3(x, y, l * 0.03), new THREE.Vector3(x - L * 0.4, y - L * 0.25, l * 0.06), new THREE.Vector3(x - L, y - L * 0.2, l * 0.08)], 0.006));
   }
   if (F.plano) grupo.rotation.x = -Math.PI / 2 + 0.35;
   return grupo;
