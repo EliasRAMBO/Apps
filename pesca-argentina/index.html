@@ -92,6 +92,18 @@
     </aside>
   </main>
 
+  <div id="visor3d" class="visor" hidden role="dialog" aria-modal="true" aria-labelledby="visor-titulo">
+    <div class="visor-caja">
+      <div class="visor-cabecera">
+        <h2 id="visor-titulo"></h2>
+        <button id="visor-cerrar" type="button" aria-label="Cerrar">✕</button>
+      </div>
+      <div id="visor-lienzo" class="visor-lienzo"></div>
+      <p class="nota">Modelo 3D ilustrativo generado por la app: forma, aletas y colores típicos, no a escala. Arrastre para girar; pellizque o use la rueda para acercar.</p>
+      <div id="visor-foto" class="visor-foto"></div>
+    </div>
+  </div>
+
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
   <script src="vendor/leaflet/leaflet.js"></script>

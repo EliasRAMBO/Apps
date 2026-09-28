@@ -257,6 +257,7 @@
           <h4>Equipo sugerido</h4><p>${esc(esp.equipo)}</p>
           <p class="nota">${esc(esp.notas)}</p>
           <p class="nota">Índice: ${esc(comps)}</p>
+          <button type="button" class="ver-3d" data-especie="${item.id}">🐟 Ver en 3D y foto</button>
           ${enlaces(esp, zona)}
         </div>
       </details>`;
@@ -407,6 +408,7 @@
           ${lista("Carnadas", e.carnadas)}${lista("Señuelos", e.senuelos)}${lista("Métodos", e.metodos)}
           <h4>Equipo sugerido</h4><p>${esc(e.equipo)}</p>
           <p class="nota">${esc(e.notas)}</p>
+          <button type="button" class="ver-3d" data-especie="${id}">🐟 Ver en 3D y foto</button>
           <button type="button" class="ver-zonas" data-especie="${id}">Ver zonas en el mapa</button>
           ${enlaces(e, null)}
         </div>
@@ -668,6 +670,8 @@
   $("#panel").addEventListener("click", e => {
     const ir = e.target.closest("[data-ir]");
     if (ir) { e.preventDefault(); irAZona(ZONAS.find(z => z.id === ir.dataset.ir)); return; }
+    const v3 = e.target.closest(".ver-3d");
+    if (v3) { abrir3D(v3.dataset.especie); return; }
     const ver = e.target.closest(".ver-zonas");
     if (ver) { filtrarEspecie(ver.dataset.especie); return; }
     const fila = e.target.closest("tr[data-fecha]");
@@ -684,6 +688,71 @@
   }
   $("#fecha").value = estado.fecha;
   $("#fecha").addEventListener("change", e => { if (e.target.value) cambiarFecha(e.target.value); });
+
+  // ---------------- Visor 3D y foto ----------------
+  // Artículos de Wikipedia para la foto (se prueba en español y luego en inglés).
+  const WIKI = {
+    dorado: ["Salminus brasiliensis"], surubi: ["Pseudoplatystoma corruscans"], pacu: ["Piaractus mesopotamicus"],
+    boga: ["Megaleporinus obtusidens", "Leporinus obtusidens"], pejerrey: ["Odontesthes bonariensis"],
+    tararira: ["Hoplias malabaricus"], bagre: ["Pimelodus maculatus"], armado: ["Pterodoras granulosus"],
+    pati: ["Luciopimelodus pati"], palometa: ["Pygocentrus nattereri"], carpa: ["Cyprinus carpio"],
+    trucha: ["Oncorhynchus mykiss"], truchaMarron: ["Salmo trutta"], perca: ["Percichthys trucha"],
+    pejerreyPatagonico: ["Odontesthes hatcheri"], salmonEncerrado: ["Salmo salar"],
+    corvinaRubia: ["Micropogonias furnieri"], corvinaNegra: ["Pogonias courbina", "Pogonias cromis"],
+    pescadilla: ["Cynoscion guatucupa"], anchoa: ["Pomatomus saltatrix"], brotola: ["Urophycis brasiliensis"],
+    lenguado: ["Paralichthys patagonicus", "Paralichthys orbignyanus"], pejerreyMar: ["Odontesthes argentinensis"],
+    tiburones: ["Carcharias taurus"], gatuzo: ["Mustelus schmitti"], lisa: ["Mugil liza"],
+    salmonMar: ["Pseudopercis semifasciata"], mero: ["Acanthistius patachonicus"],
+    robalo: ["Eleginops maclovinus"], pezPalo: ["Percophis brasiliensis"]
+  };
+  let visor3d = null;
+
+  async function abrir3D(id) {
+    const esp = ESPECIES[id];
+    if (!esp) return;
+    $("#visor-titulo").textContent = esp.nombre;
+    $("#visor-lienzo").innerHTML = "<span>Cargando modelo 3D…</span>";
+    $("#visor-foto").innerHTML = "";
+    $("#visor3d").hidden = false;
+    cargarFoto(id);
+    try {
+      visor3d = visor3d || await import(new URL("js/peces3d.js", document.baseURI).href);
+      if ($("#visor3d").hidden) return;
+      visor3d.abrirVisor($("#visor-lienzo"), id);
+    } catch (e) {
+      $("#visor-lienzo").innerHTML = "<span>No se pudo mostrar el modelo 3D en este dispositivo.</span>";
+    }
+  }
+
+  function cerrar3D() {
+    $("#visor3d").hidden = true;
+    if (visor3d) visor3d.cerrarVisor();
+  }
+  $("#visor-cerrar").addEventListener("click", cerrar3D);
+  $("#visor3d").addEventListener("click", e => { if (e.target.id === "visor3d") cerrar3D(); });
+  document.addEventListener("keydown", e => { if (e.key === "Escape" && !$("#visor3d").hidden) cerrar3D(); });
+
+  async function cargarFoto(id) {
+    const destino = $("#visor-foto");
+    for (const idioma of ["es", "en"]) {
+      for (const titulo of WIKI[id] || []) {
+        try {
+          const r = await fetch(`https://${idioma}.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(titulo.replace(/ /g, "_"))}`);
+          if (!r.ok) continue;
+          const j = await r.json();
+          const img = j.originalimage || j.thumbnail;
+          if (!img || !img.source || j.type === "disambiguation") continue;
+          if ($("#visor-titulo").textContent !== ESPECIES[id].nombre) return; // se abrió otra especie
+          const src = j.thumbnail && j.thumbnail.width >= 600 ? j.thumbnail.source : img.source;
+          const enlace = j.content_urls && j.content_urls.desktop ? j.content_urls.desktop.page : `https://${idioma}.wikipedia.org/wiki/${encodeURIComponent(titulo)}`;
+          destino.innerHTML = `<figure><img src="${esc(src)}" alt="Foto de ${esc(ESPECIES[id].nombre)}" loading="lazy">
+            <figcaption>Foto real: <a href="${esc(enlace)}" target="_blank" rel="noopener">${esc(j.title)} en Wikipedia</a> (Wikimedia Commons; ver licencia en el artículo).</figcaption></figure>`;
+          return;
+        } catch (e) { /* probar el siguiente */ }
+      }
+    }
+    destino.innerHTML = `<p class="nota">No se encontró una foto para esta especie.</p>`;
+  }
 
   let temporizador;
   function aviso(txt) {

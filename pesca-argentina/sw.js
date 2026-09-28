@@ -1,6 +1,6 @@
 /* Service worker: guarda la interfaz para abrirla sin conexión.
    Clima, mapas y búsquedas siempre se piden a la red. */
-const CACHE = "pesca-ar-v4";
+const CACHE = "pesca-ar-v5";
 const ARCHIVOS = [
   "./", "index.html", "css/styles.css", "manifest.webmanifest",
   "js/config.js", "js/data.js", "js/pesca.js", "js/clima.js", "js/app.js",

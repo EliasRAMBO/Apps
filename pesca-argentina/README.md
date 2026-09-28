@@ -15,6 +15,8 @@ temperatura del agua.
   OpenStreetMap para saber si es un lago, embalse, río o bañado, y se muestra una
   **estimación regional** (Pampa, Litoral, Centro, NOA, Cuyo, Patagonia, Tierra del
   Fuego o mar) claramente señalada como tal.
+- **Modelos 3D** ilustrativos de cada especie (se pueden girar y acercar) y **foto real**
+  tomada de Wikipedia.
 - Por especie: mejores meses, horario y lugar, carnadas, señuelos, métodos, equipo
   sugerido y notas de normativa.
 - **Clima** (Open-Meteo): condiciones actuales y pronóstico de 7 días con tendencia de
@@ -77,5 +79,6 @@ js/clima.js           Open-Meteo (pronóstico y datos marinos)
 js/app.js             Mapa, panel, reportes
 js/config.js          Clave opcional de Google Maps
 sw.js                 Service worker (uso sin conexión de la interfaz)
-vendor/               Leaflet 1.9.4, SunCalc 1.9.0, GoogleMutant 0.14.1
+js/peces3d.js         Modelos 3D generados por código (Three.js)
+vendor/               Leaflet 1.9.4, SunCalc 1.9.0, GoogleMutant 0.14.1, Three.js 0.186 (reducido)
 ```
