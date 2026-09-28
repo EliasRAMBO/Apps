@@ -19,9 +19,7 @@
    "fuente": "iNaturalist",
    "foto": 664666128,
    "taxon": "Piaractus mesopotamicus"
-  },
-  "ancho": 0.38,
-  "anchoCabeza": 0.4
+  }
  },
  "boga": {
   "archivo": "boga.webp",
@@ -43,9 +41,7 @@
    "fuente": "iNaturalist",
    "foto": 104854137,
    "taxon": "Odontesthes bonariensis"
-  },
-  "ancho": 0.55,
-  "anchoCabeza": 0.6
+  }
  },
  "tararira": {
   "archivo": "tararira.webp",
@@ -56,9 +52,7 @@
    "fuente": "iNaturalist",
    "foto": 44953417,
    "taxon": "Hoplias malabaricus"
-  },
-  "ancho": 0.65,
-  "anchoCabeza": 0.8
+  }
  },
  "armado": {
   "archivo": "armado.webp",
@@ -69,9 +63,7 @@
    "fuente": "Wikimedia Commons",
    "foto": "wm5513563",
    "tipo": "lámina científica"
-  },
-  "ancho": 0.6,
-  "anchoCabeza": 1.0
+  }
  },
  "pati": {
   "archivo": "pati.webp",
@@ -82,9 +74,7 @@
    "fuente": "iNaturalist",
    "foto": 130821267,
    "taxon": "Luciopimelodus pati"
-  },
-  "ancho": 0.6,
-  "anchoCabeza": 1.1
+  }
  },
  "palometa": {
   "archivo": "palometa.webp",
@@ -95,9 +85,7 @@
    "fuente": "iNaturalist",
    "foto": 296041618,
    "taxon": "Pygocentrus nattereri"
-  },
-  "ancho": 0.38,
-  "anchoCabeza": 0.4
+  }
  },
  "trucha": {
   "archivo": "trucha.webp",
@@ -141,9 +129,7 @@
    "fuente": "iNaturalist",
    "foto": 465465013,
    "taxon": "Odontesthes hatcheri"
-  },
-  "ancho": 0.55,
-  "anchoCabeza": 0.6
+  }
  },
  "salmonEncerrado": {
   "archivo": "salmonEncerrado.webp",
@@ -165,8 +151,7 @@
    "fuente": "iNaturalist",
    "foto": 191704400,
    "taxon": "Micropogonias furnieri"
-  },
-  "ancho": 0.45
+  }
  },
  "corvinaNegra": {
   "archivo": "corvinaNegra.webp",
@@ -177,8 +162,7 @@
    "fuente": "iNaturalist",
    "foto": 32381449,
    "taxon": "Pogonias courbina"
-  },
-  "ancho": 0.45
+  }
  },
  "pescadilla": {
   "archivo": "pescadilla.webp",
@@ -189,8 +173,7 @@
    "fuente": "iNaturalist",
    "foto": 714987425,
    "taxon": "Cynoscion guatucupa"
-  },
-  "ancho": 0.45
+  }
  },
  "anchoa": {
   "archivo": "anchoa.webp",
@@ -212,9 +195,7 @@
    "fuente": "iNaturalist",
    "foto": 109156060,
    "taxon": "Urophycis brasiliensis"
-  },
-  "ancho": 0.6,
-  "anchoCabeza": 0.7
+  }
  },
  "lenguado": {
   "archivo": "lenguado.webp",
@@ -225,10 +206,7 @@
    "fuente": "iNaturalist",
    "foto": 336552955,
    "taxon": "Paralichthys orbignyanus"
-  },
-  "ancho": 0.22,
-  "anchoCabeza": 0.22,
-  "plano": true
+  }
  },
  "pejerreyMar": {
   "archivo": "pejerreyMar.webp",
@@ -239,9 +217,7 @@
    "fuente": "iNaturalist",
    "foto": 195457371,
    "taxon": "Odontesthes argentinensis"
-  },
-  "ancho": 0.55,
-  "anchoCabeza": 0.6
+  }
  },
  "tiburones": {
   "archivo": "tiburones.webp",
@@ -252,9 +228,7 @@
    "fuente": "iNaturalist",
    "foto": 697577135,
    "taxon": "Carcharias taurus"
-  },
-  "ancho": 0.85,
-  "anchoCabeza": 0.9
+  }
  },
  "gatuzo": {
   "archivo": "gatuzo.webp",
@@ -265,9 +239,7 @@
    "fuente": "iNaturalist",
    "foto": 231265504,
    "taxon": "Mustelus schmitti"
-  },
-  "ancho": 0.85,
-  "anchoCabeza": 0.9
+  }
  },
  "lisa": {
   "archivo": "lisa.webp",
@@ -278,9 +250,7 @@
    "fuente": "iNaturalist",
    "foto": 233076247,
    "taxon": "Mugil liza"
-  },
-  "ancho": 0.65,
-  "anchoCabeza": 0.75
+  }
  },
  "salmonMar": {
   "archivo": "salmonMar.webp",
@@ -291,9 +261,7 @@
    "fuente": "iNaturalist",
    "foto": 478105426,
    "taxon": "Pseudopercis semifasciata"
-  },
-  "ancho": 0.6,
-  "anchoCabeza": 0.7
+  }
  },
  "robalo": {
   "archivo": "robalo.webp",
@@ -304,8 +272,7 @@
    "fuente": "iNaturalist",
    "foto": 337868150,
    "taxon": "Eleginops maclovinus"
-  },
-  "ancho": 0.55
+  }
  },
  "pezPalo": {
   "archivo": "pezPalo.webp",
@@ -316,9 +283,7 @@
    "fuente": "iNaturalist",
    "foto": 505044845,
    "taxon": "Percophis brasiliensis"
-  },
-  "ancho": 0.8,
-  "anchoCabeza": 1.0
+  }
  },
  "bagre": {
   "archivo": "bagre.webp",
@@ -329,9 +294,7 @@
    "fuente": "iNaturalist",
    "foto": 176824525,
    "taxon": "Pimelodus maculatus"
-  },
-  "ancho": 0.6,
-  "anchoCabeza": 1.0
+  }
  },
  "mero": {
   "archivo": "mero.webp",
@@ -342,9 +305,7 @@
    "fuente": "iNaturalist",
    "foto": 711277067,
    "taxon": "Acanthistius patachonicus"
-  },
-  "ancho": 0.6,
-  "anchoCabeza": 0.7
+  }
  },
  "carpa": {
   "archivo": "carpa.webp",
@@ -355,9 +316,7 @@
    "fuente": "iNaturalist",
    "foto": 539999765,
    "taxon": "Cyprinus carpio"
-  },
-  "ancho": 0.55,
-  "anchoCabeza": 0.6
+  }
  },
  "surubi": {
   "archivo": "surubi.webp",
@@ -367,8 +326,6 @@
    "url": "https://commons.wikimedia.org/wiki/File:Pseudoplatystoma_corruscans_RIP.png",
    "fuente": "Wikimedia Commons",
    "foto": "wm163947220"
-  },
-  "ancho": 0.7,
-  "anchoCabeza": 1.3
+  }
  }
 }

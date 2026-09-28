@@ -175,7 +175,7 @@ ul { margin: 2px 0; padding-left: 20px; }
 @media (prefers-color-scheme: dark) { .form-reporte button[type=submit] { color: #0e171b; } }
 .campo { display: block; font-size: 13px; color: var(--suave); }
 
-/* Visor 3D */
+/* Ventana de foto de la especie */
 .visor {
   position: fixed; inset: 0; z-index: 3000; background: rgba(5, 15, 20, .72);
   display: flex; align-items: center; justify-content: center; padding: 16px;
@@ -189,11 +189,11 @@ ul { margin: 2px 0; padding-left: 20px; }
 .visor-cabecera h2 { margin: 0; font-size: 17px; }
 .visor-cabecera button { border: 0; font-size: 18px; padding: 4px 10px; }
 .visor-lienzo { width: 100%; aspect-ratio: 16 / 10; border-radius: 10px; overflow: hidden; margin: 10px 0 4px; background: var(--fondo-3d); display: grid; place-items: center; color: #cfe3e8; }
-.visor-lienzo canvas { display: block; }
+.visor-lienzo img { width: 100%; height: 100%; object-fit: contain; display: block; }
 .visor-foto figure { margin: 10px 0 0; }
 .visor-foto img { width: 100%; max-height: 320px; object-fit: contain; border-radius: 8px; background: var(--fondo); }
 .visor-foto figcaption { font-size: 12px; color: var(--suave); margin-top: 4px; }
-.ver-3d { margin: 8px 8px 0 0; }
+.ver-foto { margin: 8px 8px 0 0; }
 @media (max-width: 820px) {
   .visor { padding: 0; align-items: flex-end; }
   .visor-caja { border-radius: 16px 16px 0 0; max-height: 92%; }
@@ -236,7 +236,7 @@ ul { margin: 2px 0; padding-left: 20px; }
   .tab { padding-bottom: calc(20px + env(safe-area-inset-bottom)); }
   .grilla-actual { grid-template-columns: repeat(2, 1fr); }
   .leaflet-bottom { bottom: var(--alto-panel, 60px); transition: bottom .25s ease; }
-  /* Visor 3D */
+  /* Ventana de foto de la especie */
 .visor {
   position: fixed; inset: 0; z-index: 3000; background: rgba(5, 15, 20, .72);
   display: flex; align-items: center; justify-content: center; padding: 16px;
@@ -250,11 +250,11 @@ ul { margin: 2px 0; padding-left: 20px; }
 .visor-cabecera h2 { margin: 0; font-size: 17px; }
 .visor-cabecera button { border: 0; font-size: 18px; padding: 4px 10px; }
 .visor-lienzo { width: 100%; aspect-ratio: 16 / 10; border-radius: 10px; overflow: hidden; margin: 10px 0 4px; background: var(--fondo-3d); display: grid; place-items: center; color: #cfe3e8; }
-.visor-lienzo canvas { display: block; }
+.visor-lienzo img { width: 100%; height: 100%; object-fit: contain; display: block; }
 .visor-foto figure { margin: 10px 0 0; }
 .visor-foto img { width: 100%; max-height: 320px; object-fit: contain; border-radius: 8px; background: var(--fondo); }
 .visor-foto figcaption { font-size: 12px; color: var(--suave); margin-top: 4px; }
-.ver-3d { margin: 8px 8px 0 0; }
+.ver-foto { margin: 8px 8px 0 0; }
 @media (max-width: 820px) {
   .visor { padding: 0; align-items: flex-end; }
   .visor-caja { border-radius: 16px 16px 0 0; max-height: 92%; }

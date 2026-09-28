@@ -262,7 +262,7 @@
           <h4>Equipo sugerido</h4><p>${esc(esp.equipo)}</p>
           <p class="nota">${esc(esp.notas)}</p>
           <p class="nota">Índice: ${esc(comps)}</p>
-          <button type="button" class="ver-3d" data-especie="${item.id}">🐟 Ver en 3D y foto</button>
+          <button type="button" class="ver-foto" data-especie="${item.id}">🐟 Ver foto</button>
           ${enlaces(esp, zona)}
         </div>
       </details>`;
@@ -413,7 +413,7 @@
           ${lista("Carnadas", e.carnadas)}${lista("Señuelos", e.senuelos)}${lista("Métodos", e.metodos)}
           <h4>Equipo sugerido</h4><p>${esc(e.equipo)}</p>
           <p class="nota">${esc(e.notas)}</p>
-          <button type="button" class="ver-3d" data-especie="${id}">🐟 Ver en 3D y foto</button>
+          <button type="button" class="ver-foto" data-especie="${id}">🐟 Ver foto</button>
           <button type="button" class="ver-zonas" data-especie="${id}">Ver zonas en el mapa</button>
           ${enlaces(e, null)}
         </div>
@@ -675,8 +675,8 @@
   $("#panel").addEventListener("click", e => {
     const ir = e.target.closest("[data-ir]");
     if (ir) { e.preventDefault(); irAZona(ZONAS.find(z => z.id === ir.dataset.ir)); return; }
-    const v3 = e.target.closest(".ver-3d");
-    if (v3) { abrir3D(v3.dataset.especie); return; }
+    const vf = e.target.closest(".ver-foto");
+    if (vf) { abrirFoto(vf.dataset.especie); return; }
     const ver = e.target.closest(".ver-zonas");
     if (ver) { filtrarEspecie(ver.dataset.especie); return; }
     const fila = e.target.closest("tr[data-fecha]");
@@ -694,8 +694,8 @@
   $("#fecha").value = estado.fecha;
   $("#fecha").addEventListener("change", e => { if (e.target.value) cambiarFecha(e.target.value); });
 
-  // ---------------- Visor 3D y foto ----------------
-  // Artículos de Wikipedia para la foto (se prueba en español y luego en inglés).
+  // ---------------- Foto de la especie ----------------
+  // Artículos de Wikipedia para la segunda foto y el enlace (español y luego inglés).
   const WIKI = {
     dorado: ["Salminus brasiliensis"], surubi: ["Pseudoplatystoma corruscans"], pacu: ["Piaractus mesopotamicus"],
     boga: ["Megaleporinus obtusidens", "Leporinus obtusidens"], pejerrey: ["Odontesthes bonariensis"],
@@ -710,37 +710,32 @@
     salmonMar: ["Pseudopercis semifasciata"], mero: ["Acanthistius patachonicus"],
     robalo: ["Eleginops maclovinus"], pezPalo: ["Percophis brasiliensis"]
   };
-  let visor3d = null;
+  let catalogoFotos = null;
 
-  async function abrir3D(id) {
+  /** Muestra la foto local (con crédito) y, debajo, la de Wikipedia. */
+  async function abrirFoto(id) {
     const esp = ESPECIES[id];
     if (!esp) return;
     $("#visor-titulo").textContent = esp.nombre;
-    $("#visor-lienzo").innerHTML = "<span>Cargando modelo 3D…</span>";
-    $("#visor-nota").textContent = "Arrastre para girar; pellizque o use la rueda para acercar.";
+    $("#visor-lienzo").innerHTML = "";
+    $("#visor-nota").textContent = "";
     $("#visor-foto").innerHTML = "";
     $("#visor3d").hidden = false;
     cargarFoto(id);
     try {
-      visor3d = visor3d || await import(new URL("js/peces3d.js", document.baseURI).href);
-      if ($("#visor3d").hidden) return;
-      const r = await visor3d.abrirVisor($("#visor-lienzo"), id);
-      if (r.tipo === "cancelado" || $("#visor3d").hidden) return;
-      $("#visor-nota").innerHTML = r.tipo === "foto"
-        ? `Modelo 3D construido a partir de una ${r.credito && r.credito.tipo ? esc(r.credito.tipo) : "foto real"}${r.credito ? ` de ${esc(r.credito.autor)} (<a href="${esc(r.credito.url)}" target="_blank" rel="noopener">${esc(r.credito.fuente || "iNaturalist")}</a>, licencia ${esc(r.credito.licencia)})` : ""}. El lado no fotografiado se muestra espejado. Arrastre para girar; pellizque o use la rueda para acercar.`
-        : "Modelo 3D ilustrativo generado por la app: forma, aletas y colores típicos, no a escala. Arrastre para girar; pellizque o use la rueda para acercar.";
-    } catch (e) {
-      $("#visor-lienzo").innerHTML = "<span>No se pudo mostrar el modelo 3D en este dispositivo.</span>";
-    }
+      catalogoFotos = catalogoFotos || await fetch("fotos/fotos.json").then(r => (r.ok ? r.json() : {}));
+    } catch (e) { catalogoFotos = {}; }
+    const f = catalogoFotos[id];
+    if (!f || $("#visor-titulo").textContent !== esp.nombre) return;
+    $("#visor-lienzo").innerHTML = `<img src="fotos/${esc(f.archivo)}" alt="${esc(esp.nombre)}">`;
+    const c = f.credito || {};
+    $("#visor-nota").innerHTML = `${c.tipo ? esc(c.tipo[0].toUpperCase() + c.tipo.slice(1)) : "Foto"} de ${esc(c.autor || "")} (<a href="${esc(c.url || "#")}" target="_blank" rel="noopener">${esc(c.fuente || "iNaturalist")}</a>, licencia ${esc(c.licencia || "")}).`;
   }
 
-  function cerrar3D() {
-    $("#visor3d").hidden = true;
-    if (visor3d) visor3d.cerrarVisor();
-  }
-  $("#visor-cerrar").addEventListener("click", cerrar3D);
-  $("#visor3d").addEventListener("click", e => { if (e.target.id === "visor3d") cerrar3D(); });
-  document.addEventListener("keydown", e => { if (e.key === "Escape" && !$("#visor3d").hidden) cerrar3D(); });
+  function cerrarFoto() { $("#visor3d").hidden = true; }
+  $("#visor-cerrar").addEventListener("click", cerrarFoto);
+  $("#visor3d").addEventListener("click", e => { if (e.target.id === "visor3d") cerrarFoto(); });
+  document.addEventListener("keydown", e => { if (e.key === "Escape" && !$("#visor3d").hidden) cerrarFoto(); });
 
   async function cargarFoto(id) {
     const destino = $("#visor-foto");
@@ -756,12 +751,12 @@
           const src = j.thumbnail && j.thumbnail.width >= 600 ? j.thumbnail.source : img.source;
           const enlace = j.content_urls && j.content_urls.desktop ? j.content_urls.desktop.page : `https://${idioma}.wikipedia.org/wiki/${encodeURIComponent(titulo)}`;
           destino.innerHTML = `<figure><img src="${esc(src)}" alt="Foto de ${esc(ESPECIES[id].nombre)}" loading="lazy">
-            <figcaption>Foto real: <a href="${esc(enlace)}" target="_blank" rel="noopener">${esc(j.title)} en Wikipedia</a> (Wikimedia Commons; ver licencia en el artículo).</figcaption></figure>`;
+            <figcaption>Otra foto: <a href="${esc(enlace)}" target="_blank" rel="noopener">${esc(j.title)} en Wikipedia</a> (Wikimedia Commons; ver licencia en el artículo).</figcaption></figure>`;
           return;
         } catch (e) { /* probar el siguiente */ }
       }
     }
-    destino.innerHTML = `<p class="nota">No se encontró una foto para esta especie.</p>`;
+    destino.innerHTML = `<p class="nota">No se pudo cargar la foto de Wikipedia (sin conexión o sin artículo).</p>`;
   }
 
   let temporizador;

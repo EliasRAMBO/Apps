@@ -1,8 +1,8 @@
-"""Exporta las fotos elegidas (seleccion.json) a pesca-argentina/modelos/*.webp + modelos.json."""
+"""Exporta las fotos elegidas (seleccion.json) a pesca-argentina/fotos/*.webp + fotos.json."""
 import json, os, sys, glob, math, numpy as np, cv2
 from PIL import Image
 BASE = os.path.dirname(os.path.abspath(__file__))
-DEST = os.path.join(BASE, "..", "modelos")
+DEST = os.path.join(BASE, "..", "fotos")
 os.makedirs(DEST, exist_ok=True)
 sel = json.load(open(os.path.join(BASE, "seleccion.json")))
 meta = {}
@@ -12,7 +12,7 @@ for f in glob.glob(os.path.join(BASE, "cand_meta_*.json")):
 LIC = {"cc0": "CC0", "cc-by": "CC BY", "cc-by-sa": "CC BY-SA", "cc-by-nc": "CC BY-NC", "cc-by-nc-sa": "CC BY-NC-SA", "cc-by-nd": "CC BY-ND", "cc-by-nc-nd": "CC BY-NC-ND"}
 salida = {}
 solo = sys.argv[1:] or list(sel)
-if os.path.exists(os.path.join(DEST, "modelos.json")): salida = json.load(open(os.path.join(DEST, "modelos.json")))
+if os.path.exists(os.path.join(DEST, "fotos.json")): salida = json.load(open(os.path.join(DEST, "fotos.json")))
 for esp in solo:
     s = sel[esp]
     im = Image.open(os.path.join(BASE, "cand", esp, f"{s['foto']}.png")).convert("RGBA")
@@ -57,4 +57,4 @@ for esp in solo:
         if k in s: ent[k] = s[k]
     salida[esp] = ent
     print(esp, im.size, round(ang, 1), ft["lic"], ft["autor"])
-json.dump(salida, open(os.path.join(DEST, "modelos.json"), "w"), indent=1, ensure_ascii=False)
+json.dump(salida, open(os.path.join(DEST, "fotos.json"), "w"), indent=1, ensure_ascii=False)
