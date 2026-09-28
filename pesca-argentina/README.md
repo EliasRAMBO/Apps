@@ -9,8 +9,12 @@ temperatura del agua.
 
 - **Mapa** con zoom, capas (OpenStreetMap, satélite Esri, relieve y, opcionalmente,
   Google Maps), búsqueda de lugares y **ubicación actual**.
-- **45 zonas de pesca** (Litoral, Delta, Río de la Plata, lagunas pampeanas, embalses,
-  costa atlántica, Patagonia y Tierra del Fuego) con **29 especies o grupos de especies**.
+- **79 zonas de pesca** (Litoral, Delta, Río de la Plata, lagunas pampeanas, embalses,
+  costa atlántica, Patagonia y Tierra del Fuego) con **30 especies o grupos de especies**.
+- **Cualquier otro lugar**: si el punto no está en una zona registrada, se consulta
+  OpenStreetMap para saber si es un lago, embalse, río o bañado, y se muestra una
+  **estimación regional** (Pampa, Litoral, Centro, NOA, Cuyo, Patagonia, Tierra del
+  Fuego o mar) claramente señalada como tal.
 - Por especie: mejores meses, horario y lugar, carnadas, señuelos, métodos, equipo
   sugerido y notas de normativa.
 - **Clima** (Open-Meteo): condiciones actuales y pronóstico de 7 días con tendencia de

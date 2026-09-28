@@ -30,15 +30,42 @@
       .slice(0, max);
   }
 
-  /** Especies probables en un punto: unión de las zonas cercanas (≤ 1,5 radios o 60 km). */
-  function especiesEnPunto(zonas, lat, lng) {
-    const cercanas = zonasCercanas(zonas, lat, lng, 8)
-      .filter(c => c.distancia <= Math.max(c.zona.radioKm * 1.5, 60));
+  /** Región aproximada que contiene el punto (null si está fuera de Argentina continental). */
+  function regionDe(regiones, lat, lng) {
+    return (regiones || []).find(r => r.dentro(lat, lng)) || null;
+  }
+
+  /**
+   * Especies probables en un punto.
+   * 1) Si el punto está dentro de una o más zonas, se usan sólo esas.
+   * 2) Si no, las zonas cercanas (≤ 1,5 radios o 60 km).
+   * 3) Si no hay ninguna, se estima por región (fuente "region").
+   */
+  function especiesEnPunto(zonas, lat, lng, regiones) {
+    const todas = zonasCercanas(zonas, lat, lng, 8);
+    let dentro = todas.filter(c => c.dentro);
+    // Zonas superpuestas de agua dulce y mar (p. ej. una laguna junto a la costa):
+    // manda el ambiente de la zona más chica, que es la más específica.
+    if (dentro.length > 1) {
+      const especifica = dentro.reduce((a, b) => a.zona.radioKm <= b.zona.radioKm ? a : b);
+      dentro = dentro.filter(c => c.zona.ambiente === especifica.zona.ambiente);
+    }
+    const usadas = dentro.length ? dentro
+      : todas.filter(c => c.distancia <= Math.max(c.zona.radioKm * 1.5, 60));
     const ids = new Map();
-    cercanas.forEach(c => c.zona.especies.forEach(id => {
+    usadas.forEach(c => c.zona.especies.forEach(id => {
       if (!ids.has(id) || ids.get(id).distancia > c.distancia) ids.set(id, c);
     }));
-    return { cercanas, especies: [...ids.entries()].map(([id, c]) => ({ id, zona: c.zona, distancia: c.distancia })) };
+    const especies = [...ids.entries()].map(([id, c]) => ({ id, zona: c.zona, distancia: c.distancia, fuente: "zona" }));
+    const cercanas = todas.slice(0, 5);
+    if (especies.length) return { cercanas, especies, region: null };
+    const region = regionDe(regiones, lat, lng);
+    if (!region) return { cercanas, especies: [], region: null };
+    const zonaRegional = { id: null, nombre: region.nombre, provincia: "", tipo: "Estimación regional", regional: true };
+    return {
+      cercanas, region,
+      especies: region.especies.map(id => ({ id, zona: zonaRegional, distancia: 0, fuente: "region" }))
+    };
   }
 
   // ---------------- Luna ----------------
@@ -160,7 +187,7 @@
   }
 
   const api = {
-    distanciaKm, zonasCercanas, especiesEnPunto,
+    distanciaKm, zonasCercanas, especiesEnPunto, regionDe,
     faseLunar, puntajeLuna, transitosLuna, periodosSolunares,
     puntajeTemporada, puntajeTemperatura, puntajeClima, indiceActividad, etiquetaIndice
   };

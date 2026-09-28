@@ -204,6 +204,20 @@ const ESPECIES = {
     equipo: "Caña liviana, nylon 0,18–0,22 mm.",
     notas: "Especie nativa patagónica; se recomienda devolución."
   },
+  pejerreyPatagonico: {
+    nombre: "Pejerrey patagónico",
+    cientifico: "Odontesthes hatcheri",
+    ambiente: "dulce",
+    meses: [10, 11, 12, 1, 2, 3],
+    posibles: [4, 9],
+    tempAgua: [8, 20],
+    horario: "Mañana y tarde; costas con juncos y bahías reparadas del viento.",
+    carnadas: ["Filet de pejerrey o mojarra (donde la carnada esté permitida)", "Lombriz"],
+    senuelos: ["Cucharitas chicas", "Moscas (ninfas y streamers pequeños)"],
+    metodos: ["Spinning liviano", "Pesca con mosca", "Línea de flote con boyas"],
+    equipo: "Caña liviana 2,10–3,00 m, nylon 0,20–0,25 mm, anzuelos 2–4.",
+    notas: "Nativo de lagos y embalses de la Patagonia extraandina. En Parques Nacionales la carnada natural está prohibida."
+  },
   salmonEncerrado: {
     nombre: "Salmón encerrado (landlocked) / Chinook",
     cientifico: "Salmo salar sebago / Oncorhynchus tshawytscha",
@@ -468,7 +482,7 @@ const ZONAS = [
   { id: "beagle", nombre: "Ushuaia / Canal Beagle", provincia: "Tierra del Fuego", lat: -54.82, lng: -68.3, radioKm: 40, ambiente: "mar", tipo: "Canal y ríos fueguinos", especies: ["robalo", "pejerreyMar", "trucha"] },
 
   // --- Patagonia agua dulce ---
-  { id: "chocon", nombre: "El Chocón / Ramos Mexía", provincia: "Neuquén", lat: -39.3, lng: -68.9, radioKm: 50, ambiente: "dulce", tipo: "Embalse y río Limay inferior", especies: ["trucha", "perca", "pejerrey"] },
+  { id: "chocon", nombre: "El Chocón / Ramos Mexía", provincia: "Neuquén", lat: -39.3, lng: -68.9, radioKm: 50, ambiente: "dulce", tipo: "Embalse y río Limay inferior", especies: ["trucha", "perca", "pejerreyPatagonico"] },
   { id: "junin-andes", nombre: "Junín de los Andes (Chimehuín, Malleo, Aluminé)", provincia: "Neuquén", lat: -39.95, lng: -71.08, radioKm: 45, ambiente: "dulce", tipo: "Ríos y lagos cordilleranos", especies: ["trucha", "perca"] },
   { id: "san-martin", nombre: "San Martín de los Andes (Lácar, Meliquina)", provincia: "Neuquén", lat: -40.15, lng: -71.35, radioKm: 30, ambiente: "dulce", tipo: "Lagos cordilleranos", especies: ["trucha", "perca"] },
   { id: "traful", nombre: "Villa Traful / Lago Traful", provincia: "Neuquén", lat: -40.65, lng: -71.4, radioKm: 25, ambiente: "dulce", tipo: "Lago cordillerano", especies: ["salmonEncerrado", "trucha", "perca"] },
@@ -476,7 +490,70 @@ const ZONAS = [
   { id: "esquel", nombre: "Esquel / Los Alerces / Futaleufú", provincia: "Chubut", lat: -42.9, lng: -71.6, radioKm: 55, ambiente: "dulce", tipo: "Lagos y ríos cordilleranos", especies: ["trucha", "perca"] },
   { id: "strobel", nombre: "Lago Strobel (Jurassic Lake)", provincia: "Santa Cruz", lat: -48.5, lng: -71.2, radioKm: 40, ambiente: "dulce", tipo: "Lago de meseta", especies: ["trucha"], notas: "Truchas arco iris de gran porte; acceso por estancias/lodges." },
   { id: "santa-cruz", nombre: "Río Santa Cruz", provincia: "Santa Cruz", lat: -50.1, lng: -70.3, radioKm: 80, ambiente: "dulce", tipo: "Río patagónico", especies: ["trucha", "salmonEncerrado"] },
-  { id: "rio-grande", nombre: "Río Grande", provincia: "Tierra del Fuego", lat: -53.79, lng: -67.9, radioKm: 50, ambiente: "dulce", tipo: "Río fueguino", especies: ["truchaMarron", "trucha", "robalo"] }
+  { id: "rio-grande", nombre: "Río Grande", provincia: "Tierra del Fuego", lat: -53.79, lng: -67.9, radioKm: 50, ambiente: "dulce", tipo: "Río fueguino", especies: ["truchaMarron", "trucha", "robalo"] },
+  // --- Lagos, lagunas y embalses adicionales ---
+  { id: "ansenuza", nombre: "Mar Chiquita / Mar de Ansenuza (Miramar)", provincia: "Córdoba", lat: -30.75, lng: -62.6, radioKm: 50, ambiente: "dulce", tipo: "Laguna salada y bañados del Río Dulce", especies: ["pejerrey", "bagre", "tararira"], notas: "Laguna hipersalina: el pejerrey se concentra en las desembocaduras de los ríos Dulce, Suquía y Xanaes y abunda más en años de menor salinidad. En los bañados del Río Dulce hay tararira y bagre." },
+  { id: "cruz-del-eje", nombre: "Embalse Cruz del Eje", provincia: "Córdoba", lat: -30.78, lng: -64.77, radioKm: 15, ambiente: "dulce", tipo: "Embalse", especies: ["pejerrey", "carpa", "bagre"] },
+  { id: "melincue", nombre: "Laguna Melincué", provincia: "Santa Fe", lat: -33.7, lng: -61.47, radioKm: 15, ambiente: "dulce", tipo: "Laguna pampeana", especies: ["pejerrey", "carpa"] },
+  { id: "picasa", nombre: "Laguna La Picasa", provincia: "Santa Fe / Buenos Aires", lat: -34.28, lng: -62.2, radioKm: 20, ambiente: "dulce", tipo: "Laguna pampeana", especies: ["pejerrey", "carpa"] },
+  { id: "bragado", nombre: "Lagunas del noroeste bonaerense (Bragado, 9 de Julio, Lincoln)", provincia: "Buenos Aires", lat: -35.13, lng: -60.5, radioKm: 50, ambiente: "dulce", tipo: "Lagunas pampeanas", especies: ["pejerrey", "tararira", "carpa", "bagre"] },
+  { id: "blanca-grande", nombre: "Laguna Blanca Grande (Olavarría)", provincia: "Buenos Aires", lat: -36.52, lng: -60.93, radioKm: 15, ambiente: "dulce", tipo: "Laguna pampeana", especies: ["pejerrey", "carpa"] },
+  { id: "salada-grande", nombre: "Laguna Salada Grande (Gral. Madariaga)", provincia: "Buenos Aires", lat: -36.93, lng: -56.98, radioKm: 10, ambiente: "dulce", tipo: "Laguna pampeana", especies: ["pejerrey", "tararira", "carpa"] },
+  { id: "de-los-padres", nombre: "Laguna de los Padres", provincia: "Buenos Aires", lat: -37.94, lng: -57.74, radioKm: 5, ambiente: "dulce", tipo: "Laguna", especies: ["pejerrey", "tararira", "carpa"] },
+  { id: "sauce-grande", nombre: "Laguna Sauce Grande", provincia: "Buenos Aires", lat: -38.95, lng: -61.37, radioKm: 8, ambiente: "dulce", tipo: "Laguna", especies: ["pejerrey", "carpa"] },
+  { id: "paso-piedras", nombre: "Dique Paso de las Piedras", provincia: "Buenos Aires", lat: -38.4, lng: -61.72, radioKm: 10, ambiente: "dulce", tipo: "Embalse", especies: ["pejerrey", "carpa"] },
+  { id: "don-tomas", nombre: "Laguna Don Tomás (Santa Rosa)", provincia: "La Pampa", lat: -36.62, lng: -64.31, radioKm: 5, ambiente: "dulce", tipo: "Laguna urbana", especies: ["pejerrey", "carpa"] },
+  { id: "casa-de-piedra", nombre: "Embalse Casa de Piedra", provincia: "La Pampa / Río Negro", lat: -38.2, lng: -67.3, radioKm: 30, ambiente: "dulce", tipo: "Embalse sobre el río Colorado", especies: ["pejerrey", "perca", "trucha", "carpa"] },
+  { id: "pellegrini", nombre: "Lago Pellegrini", provincia: "Río Negro", lat: -38.68, lng: -68.0, radioKm: 12, ambiente: "dulce", tipo: "Lago artificial", especies: ["pejerrey", "perca", "carpa"] },
+  { id: "barreales", nombre: "Embalses Los Barreales y Mari Menuco", provincia: "Neuquén", lat: -38.55, lng: -68.85, radioKm: 30, ambiente: "dulce", tipo: "Embalses", especies: ["trucha", "perca", "pejerreyPatagonico"] },
+  { id: "alicura", nombre: "Embalses Alicurá y Piedra del Águila", provincia: "Neuquén / Río Negro", lat: -40.4, lng: -70.6, radioKm: 45, ambiente: "dulce", tipo: "Embalses sobre el Limay", especies: ["trucha", "perca"] },
+  { id: "alumine", nombre: "Lagos Aluminé y Moquehue", provincia: "Neuquén", lat: -38.95, lng: -71.25, radioKm: 30, ambiente: "dulce", tipo: "Lagos cordilleranos", especies: ["trucha", "perca"] },
+  { id: "ameghino", nombre: "Embalse Florentino Ameghino", provincia: "Chubut", lat: -43.7, lng: -66.45, radioKm: 25, ambiente: "dulce", tipo: "Embalse sobre el río Chubut", especies: ["trucha", "perca", "pejerreyPatagonico"] },
+  { id: "musters", nombre: "Lagos Musters y Colhué Huapi", provincia: "Chubut", lat: -45.45, lng: -69.1, radioKm: 45, ambiente: "dulce", tipo: "Lagos de meseta", especies: ["pejerreyPatagonico", "perca", "trucha"] },
+  { id: "fontana", nombre: "Lagos Fontana y La Plata", provincia: "Chubut", lat: -44.85, lng: -71.55, radioKm: 25, ambiente: "dulce", tipo: "Lagos cordilleranos", especies: ["trucha"] },
+  { id: "lago-bsas", nombre: "Lago Buenos Aires (Los Antiguos)", provincia: "Santa Cruz", lat: -46.5, lng: -71.4, radioKm: 35, ambiente: "dulce", tipo: "Lago cordillerano", especies: ["trucha", "perca"] },
+  { id: "pueyrredon", nombre: "Lagos Posadas y Pueyrredón", provincia: "Santa Cruz", lat: -47.35, lng: -71.95, radioKm: 25, ambiente: "dulce", tipo: "Lagos cordilleranos", especies: ["trucha"] },
+  { id: "cardiel", nombre: "Lago Cardiel", provincia: "Santa Cruz", lat: -48.95, lng: -71.25, radioKm: 25, ambiente: "dulce", tipo: "Lago de meseta", especies: ["trucha"] },
+  { id: "viedma", nombre: "Lago Viedma / El Chaltén", provincia: "Santa Cruz", lat: -49.6, lng: -72.2, radioKm: 40, ambiente: "dulce", tipo: "Lago glaciar y ríos", especies: ["trucha"] },
+  { id: "lago-argentino", nombre: "Lago Argentino (El Calafate)", provincia: "Santa Cruz", lat: -50.25, lng: -72.4, radioKm: 45, ambiente: "dulce", tipo: "Lago glaciar", especies: ["trucha", "perca"] },
+  { id: "fagnano", nombre: "Lago Fagnano (Tolhuin)", provincia: "Tierra del Fuego", lat: -54.58, lng: -67.9, radioKm: 50, ambiente: "dulce", tipo: "Lago fueguino", especies: ["trucha"] },
+  { id: "ullum", nombre: "Embalses Ullum y Punta Negra", provincia: "San Juan", lat: -31.47, lng: -68.7, radioKm: 20, ambiente: "dulce", tipo: "Embalses", especies: ["pejerrey", "trucha", "carpa"] },
+  { id: "cuesta-viento", nombre: "Embalse Cuesta del Viento (Rodeo)", provincia: "San Juan", lat: -30.2, lng: -69.07, radioKm: 15, ambiente: "dulce", tipo: "Embalse de altura", especies: ["trucha", "pejerrey"] },
+  { id: "pirquitas", nombre: "Dique Las Pirquitas", provincia: "Catamarca", lat: -28.27, lng: -65.73, radioKm: 12, ambiente: "dulce", tipo: "Embalse", especies: ["pejerrey", "carpa"] },
+  { id: "el-cadillal", nombre: "Dique El Cadillal", provincia: "Tucumán", lat: -26.62, lng: -65.2, radioKm: 12, ambiente: "dulce", tipo: "Embalse", especies: ["pejerrey", "carpa", "bagre"] },
+  { id: "el-tunal", nombre: "Dique El Tunal", provincia: "Salta", lat: -25.25, lng: -64.4, radioKm: 20, ambiente: "dulce", tipo: "Embalse sobre el río Juramento", especies: ["dorado", "bagre", "pejerrey", "carpa"] },
+  { id: "jujuy", nombre: "Diques de Jujuy (La Ciénaga, Los Molinos, Las Maderas)", provincia: "Jujuy", lat: -24.35, lng: -65.25, radioKm: 25, ambiente: "dulce", tipo: "Embalses", especies: ["pejerrey", "carpa"] },
+  { id: "san-luis", nombre: "Diques de San Luis (Potrero de los Funes, La Florida)", provincia: "San Luis", lat: -33.2, lng: -66.1, radioKm: 30, ambiente: "dulce", tipo: "Embalses serranos", especies: ["pejerrey", "trucha", "carpa"] },
+  { id: "posadas", nombre: "Posadas / Alto Paraná", provincia: "Misiones", lat: -27.4, lng: -55.9, radioKm: 40, ambiente: "dulce", tipo: "Río Paraná", especies: ["dorado", "surubi", "pacu", "boga", "bagre"] },
+  { id: "el-soberbio", nombre: "Río Uruguay alto (El Soberbio)", provincia: "Misiones", lat: -27.3, lng: -54.2, radioKm: 40, ambiente: "dulce", tipo: "Río Uruguay", especies: ["dorado", "surubi", "boga", "pacu", "bagre"] }
 ];
+
+/*
+ * Regiones para estimar especies donde no hay una zona registrada.
+ * Se evalúan en orden; la primera que contiene el punto se usa.
+ * Límites aproximados (no son límites políticos exactos).
+ */
+const REGIONES = [
+  { id: "tdf", nombre: "Tierra del Fuego", dentro: (la, lo) => la < -52.6,
+    especies: ["trucha", "truchaMarron"] },
+  { id: "andina", nombre: "Patagonia andina", dentro: (la, lo) => la < -36.5 && lo < -70.3,
+    especies: ["trucha", "perca"] },
+  { id: "extraandina", nombre: "Patagonia extraandina", dentro: (la, lo) => (la < -37.5 && lo < -64.5) || la < -39.5,
+    especies: ["trucha", "perca", "pejerreyPatagonico"] },
+  { id: "cuyo", nombre: "Cuyo", dentro: (la, lo) => lo < -66.5 && la >= -37.5 && la < -27.5,
+    especies: ["trucha", "pejerrey", "perca", "carpa"] },
+  { id: "noa", nombre: "Noroeste", dentro: (la, lo) => la >= -30 && lo < -63.5,
+    especies: ["pejerrey", "carpa", "bagre", "tararira", "trucha"] },
+  { id: "litoral", nombre: "Litoral (cuenca del Plata)", dentro: (la, lo) => (la > -34.3 && lo > -60.8) || (la >= -30 && lo >= -63.5),
+    especies: ["dorado", "surubi", "boga", "pati", "armado", "bagre", "tararira", "palometa", "pacu", "carpa"] },
+  { id: "centro", nombre: "Centro serrano", dentro: (la, lo) => la > -34.5 && la < -29 && lo >= -66.5 && lo < -63.5,
+    especies: ["pejerrey", "carpa", "bagre", "tararira", "trucha"] },
+  { id: "pampa", nombre: "Llanura pampeana", dentro: (la, lo) => la >= -39.5 && lo >= -66.5,
+    especies: ["pejerrey", "tararira", "carpa", "bagre"] }
+];
+
+/* Especies de mar por sector de costa, para puntos en el mar sin zona registrada. */
+const MAR_NORTE = ["corvinaRubia", "pescadilla", "gatuzo", "pejerreyMar", "brotola", "lenguado"];
+const MAR_SUR = ["robalo", "pejerreyMar", "salmonMar", "mero"];
 
 const MESES = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];

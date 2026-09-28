@@ -98,6 +98,9 @@
     estado.punto = { lat, lng, nombre: nombre || null };
     estado.clima = null;
     estado.climaError = null;
+    estado.agua = null;       // null = consultando, false = no es agua, objeto = cuerpo de agua
+    estado.enMar = false;
+    estado.hayMar = false;
     const pedido = ++estado.pedido;
 
     if (marcador) marcador.setLatLng([lat, lng]);
@@ -108,10 +111,13 @@
     mostrarEnMapa(lat, lng, zoom);
     render();
 
-    if (!nombre) nombrarLugar(lat, lng, pedido);
+    nombrarLugar(lat, lng, pedido, !nombre);
+    consultarAgua(lat, lng, pedido);
 
     try {
-      const [fc, mar] = await Promise.all([Clima.pronostico(lat, lng), Clima.marino(lat, lng)]);
+      const marP = Clima.marino(lat, lng); // nunca falla: devuelve null sin datos
+      marP.then(m => { if (pedido === estado.pedido) { estado.hayMar = !!m; render(); } });
+      const [fc, mar] = await Promise.all([Clima.pronostico(lat, lng), marP]);
       if (pedido !== estado.pedido) return;
       estado.clima = Clima.resumenDiario(fc, mar);
       estado.clima.actual = fc.current;
@@ -122,15 +128,42 @@
     render();
   }
 
-  async function nombrarLugar(lat, lng, pedido) {
+  async function nombrarLugar(lat, lng, pedido, ponerNombre) {
     try {
       const r = await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&zoom=12&accept-language=es&lat=${lat}&lon=${lng}`);
       const j = await r.json();
-      if (pedido !== estado.pedido || !j.address) return;
+      if (pedido !== estado.pedido) return;
+      // Sin dirección: el punto suele estar en el mar, lejos de la costa.
+      if (!j.address) { estado.enMar = true; render(); return; }
       const a = j.address;
-      estado.punto.nombre = [a.village || a.town || a.city || a.municipality || a.county || a.water, a.state].filter(Boolean).join(", ") || j.display_name;
+      estado.punto.provincia = a.state || "";
+      if (ponerNombre) estado.punto.nombre = [a.village || a.town || a.city || a.municipality || a.county || a.water, a.state].filter(Boolean).join(", ") || j.display_name;
       render();
     } catch (e) { /* sin nombre: se muestran coordenadas */ }
+  }
+
+  const TIPOS_AGUA = { lake: "lago / laguna", reservoir: "embalse", river: "río", lagoon: "laguna costera", pond: "laguna", oxbow: "madrejón", canal: "canal", stream_pool: "pozón" };
+
+  /** Consulta a OpenStreetMap (Overpass) si el punto está sobre un cuerpo de agua. */
+  async function consultarAgua(lat, lng, pedido) {
+    const q = `[out:json][timeout:8];is_in(${lat.toFixed(5)},${lng.toFixed(5)})->.a;(area.a["natural"="water"];area.a["landuse"="reservoir"];area.a["natural"="wetland"];);out tags;`;
+    try {
+      const r = await fetch("https://overpass-api.de/api/interpreter?data=" + encodeURIComponent(q));
+      if (!r.ok) throw new Error(r.status);
+      const j = await r.json();
+      if (pedido !== estado.pedido) return;
+      const els = (j.elements || []).map(e => e.tags || {});
+      // Preferir agua abierta con nombre sobre humedales.
+      const t = els.find(x => x.natural === "water" && x.name) || els.find(x => x.natural === "water" || x.landuse === "reservoir") || els[0];
+      estado.agua = t ? {
+        nombre: t["name:es"] || t.name || "",
+        tipo: t.natural === "wetland" ? "bañado / humedal" : (TIPOS_AGUA[t.water] || (t.landuse === "reservoir" ? "embalse" : "cuerpo de agua"))
+      } : false;
+    } catch (e) {
+      if (pedido !== estado.pedido) return;
+      estado.agua = undefined; // no se pudo consultar
+    }
+    render();
   }
 
   // ---------------- Cálculo de especies para el punto ----------------
@@ -141,7 +174,14 @@
 
   function especiesDelPunto() {
     const p = estado.punto;
-    const { cercanas, especies } = Pesca.especiesEnPunto(ZONAS, p.lat, p.lng);
+    let { cercanas, especies, region } = Pesca.especiesEnPunto(ZONAS, p.lat, p.lng, REGIONES);
+    // Mar abierto sin zona registrada: especies costeras según la latitud.
+    if (!especies.some(e => e.fuente === "zona") && estado.enMar && estado.hayMar) {
+      const sector = p.lat > -41 ? "Mar argentino (costa bonaerense)" : "Mar argentino (costa patagónica)";
+      const zonaMar = { id: null, nombre: sector, provincia: "", tipo: "Estimación regional", regional: true };
+      region = { nombre: sector };
+      especies = (p.lat > -41 ? MAR_NORTE : MAR_SUR).map(id => ({ id, zona: zonaMar, distancia: 0, fuente: "region" }));
+    }
     const fecha = fechaDesdeISO(estado.fecha);
     const mes = fecha.getMonth() + 1;
     const fase = Pesca.faseLunar(fecha).fase;
@@ -155,7 +195,7 @@
       });
       return { ...e, esp, ind };
     }).sort((a, b) => b.ind.valor - a.ind.valor);
-    return { cercanas, lista, dia };
+    return { cercanas, lista, dia, region };
   }
 
   // ---------------- Render ----------------
@@ -169,8 +209,12 @@
   function enlaces(esp, zona) {
     const q = s => encodeURIComponent(s);
     const nombre = esp.nombre.replace(/\s*\(.*\)/, "");
-    const lugar = zona ? zona.nombre.split("/")[0].trim() : "";
-    const prov = zona ? zona.provincia.split("/")[0].trim() : "Argentina";
+    let lugar = zona ? zona.nombre.split("/")[0].trim() : "";
+    let prov = zona ? zona.provincia.split("/")[0].trim() : "Argentina";
+    if (zona && zona.regional && estado.punto) {
+      lugar = (estado.agua && estado.agua.nombre) || (estado.punto.nombre || "").split(",")[0];
+      prov = estado.punto.provincia || "Argentina";
+    }
     const anio = new Date().getFullYear();
     return `
       <div class="enlaces">
@@ -220,7 +264,8 @@
 
   function renderLugar() {
     const p = estado.punto;
-    const { cercanas, lista: especies, dia } = especiesDelPunto();
+    const { cercanas, lista: especies, dia, region } = especiesDelPunto();
+    const enZona = cercanas.some(c => c.dentro);
     const reportes = reportesCerca(p.lat, p.lng, 30);
     const gmaps = `https://www.google.com/maps/search/?api=1&query=${p.lat},${p.lng}`;
     const luna = Pesca.faseLunar(fechaDesdeISO(estado.fecha));
@@ -233,6 +278,8 @@
           ${nombreDia(estado.fecha)} · ${luna.icono} ${luna.nombre} (${Math.round(luna.iluminacion * 100)}%)
           ${dia ? ` · ${esc(dia.descripcion)}, ${num(dia.tMin)}–${num(dia.tMax)} °C, viento ${num(dia.viento)} km/h ${dia.dirViento}` : ""}
         </p>
+        ${estado.agua ? `<p class="agua">💧 ${esc(estado.agua.nombre || "Cuerpo de agua sin nombre")} <small>(${esc(estado.agua.tipo)})</small></p>` : ""}
+        ${estado.agua === false && !enZona ? `<p class="nota">Según OpenStreetMap este punto no está sobre agua: las especies corresponden a los ambientes cercanos. Toque sobre el agua para mayor precisión.</p>` : ""}
         ${estado.climaError ? `<p class="error">${esc(estado.climaError)}</p>` : ""}
         ${!estado.clima && !estado.climaError ? `<p class="nota">Cargando pronóstico…</p>` : ""}
         ${estado.clima && !dia ? `<p class="nota">Sin pronóstico para la fecha elegida (sólo hay 7 días). El índice usa temporada y luna.</p>` : ""}
@@ -244,6 +291,12 @@
         ${z ? `<p>La más cercana es <a href="#" data-ir="${z.zona.id}">${esc(z.zona.nombre)}</a> (${num(z.distancia)} km).</p>` : ""}
         <p class="nota">Puede registrar un reporte propio en la pestaña Reportes para este lugar.</p></div>`;
     } else {
+      if (region) {
+        html += `<div class="regional"><strong>Estimación regional · ${esc(region.nombre)}</strong>
+          <p>Este lugar no está en la base de zonas de pesca. Se muestran las especies típicas de la región; puede que no estén todas presentes en este ambiente. Confirme con partes de pesca o pescadores locales, y registre su salida en Reportes para mejorar la información.</p></div>`;
+      }
+      const notasZona = cercanas.filter(c => c.dentro && c.zona.notas);
+      notasZona.forEach(c => { html += `<p class="regional"><strong>${esc(c.zona.nombre)}:</strong> ${esc(c.zona.notas)}</p>`; });
       html += `<h3>Especies probables (${especies.length})</h3>
         <p class="nota">Ordenadas por índice de actividad (0–100) para la fecha elegida. Toque una especie para ver carnadas, señuelos y métodos.</p>
         ${especies.map(e => tarjetaEspecie(e, reportes)).join("")}`;

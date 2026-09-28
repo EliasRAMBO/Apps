@@ -9,8 +9,8 @@ global.SunCalc = require("../vendor/suncalc.js");
 const Pesca = require("../js/pesca.js");
 const Clima = require("../js/clima.js");
 const ctx = {};
-vm.runInNewContext(fs.readFileSync(path.join(__dirname, "../js/data.js"), "utf8") + ";this.ESPECIES=ESPECIES;this.ZONAS=ZONAS;", ctx);
-const { ESPECIES, ZONAS } = ctx;
+vm.runInNewContext(fs.readFileSync(path.join(__dirname, "../js/data.js"), "utf8") + ";this.ESPECIES=ESPECIES;this.ZONAS=ZONAS;this.REGIONES=REGIONES;this.MAR=MAR_NORTE.concat(MAR_SUR);", ctx);
+const { ESPECIES, ZONAS, REGIONES, MAR } = ctx;
 
 test("todas las zonas referencian especies existentes y coordenadas en Argentina", () => {
   for (const z of ZONAS) {
@@ -42,9 +42,36 @@ test("en Chascomús aparece el pejerrey y la zona más cercana es la laguna", ()
   assert.ok(!r.especies.some(e => e.id === "trucha"));
 });
 
-test("en medio de la meseta no hay especies", () => {
-  const r = Pesca.especiesEnPunto(ZONAS, -44.0, -69.5);
-  assert.strictEqual(r.especies.length, 0);
+test("sin zona cercana: sin regiones no hay especies; con regiones se estima", () => {
+  assert.strictEqual(Pesca.especiesEnPunto(ZONAS, -44.0, -68.3).especies.length, 0);
+  const r = Pesca.especiesEnPunto(ZONAS, -44.0, -68.3, REGIONES);
+  assert.strictEqual(r.region.id, "extraandina");
+  assert.ok(r.especies.every(e => e.fuente === "region"));
+  assert.ok(r.especies.some(e => e.id === "trucha"));
+});
+
+test("Mar Chiquita de Córdoba (Ansenuza) tiene pejerrey", () => {
+  const r = Pesca.especiesEnPunto(ZONAS, -30.8, -62.7, REGIONES);
+  assert.strictEqual(r.cercanas[0].zona.id, "ansenuza");
+  assert.ok(r.especies.some(e => e.id === "pejerrey"));
+  assert.ok(!r.especies.some(e => ESPECIES[e.id].ambiente === "mar"));
+});
+
+test("laguna dentro de una zona costera: sólo especies de agua dulce", () => {
+  const r = Pesca.especiesEnPunto(ZONAS, -37.94, -57.74, REGIONES);
+  assert.ok(r.especies.length > 0);
+  assert.ok(r.especies.every(e => ESPECIES[e.id].ambiente === "dulce"), r.especies.map(e => e.id).join());
+});
+
+test("regiones: cubren puntos de todo el país y usan especies existentes", () => {
+  for (const r of REGIONES) for (const id of r.especies) assert.ok(ESPECIES[id], `${r.id}: ${id}`);
+  for (const id of MAR) assert.ok(ESPECIES[id] && ESPECIES[id].ambiente === "mar", id);
+  const casos = { "-24.2,-65.3": "noa", "-27.5,-58.8": "litoral", "-31.4,-64.2": "centro", "-36.5,-61": "pampa",
+    "-32.9,-68.8": "cuyo", "-41.1,-71.3": "andina", "-43.3,-65.1": "extraandina", "-54.8,-68.3": "tdf" };
+  for (const [k, id] of Object.entries(casos)) {
+    const [la, lo] = k.split(",").map(Number);
+    assert.strictEqual(Pesca.regionDe(REGIONES, la, lo).id, id, k);
+  }
 });
 
 test("fase lunar: luna llena conocida (2026-01-03) y nueva (2026-01-18)", () => {
