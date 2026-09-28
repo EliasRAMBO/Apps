@@ -7,8 +7,8 @@ temperatura del agua.
 
 ## Funciones
 
-- **Mapa** con zoom, capas (OpenStreetMap, satélite Esri, relieve y, opcionalmente,
-  Google Maps), búsqueda de lugares y **ubicación actual**.
+- **Mapa** con zoom, capas (IGN Argentina con toponimia oficial, OpenStreetMap, satélite
+  Esri, relieve y, opcionalmente, Google Maps), búsqueda de lugares y **ubicación actual**.
 - **79 zonas de pesca** (Litoral, Delta, Río de la Plata, lagunas pampeanas, embalses,
   costa atlántica, Patagonia y Tierra del Fuego) con **30 especies o grupos de especies**.
 - **Cualquier otro lugar**: si el punto no está en una zona registrada, se consulta

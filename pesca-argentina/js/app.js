@@ -28,6 +28,11 @@
   const mapa = L.map("mapa", { zoomControl: true, worldCopyJump: true }).setView([-38.5, -63.5], 4);
 
   const capas = {
+    // Mapa base del Instituto Geográfico Nacional: toponimia oficial argentina
+    // (Islas Malvinas, Antártida e Islas del Atlántico Sur).
+    "Mapa (IGN Argentina)": L.tileLayer("https://wms.ign.gob.ar/geoserver/gwc/service/tms/1.0.0/capabaseargenmap@EPSG%3A3857@png/{z}/{x}/{y}.png", {
+      maxZoom: 18, tms: true, attribution: "© Instituto Geográfico Nacional (Argenmap)"
+    }),
     "Mapa (OpenStreetMap)": L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
       maxZoom: 19, attribution: "© OpenStreetMap"
     }),
@@ -38,7 +43,7 @@
       maxZoom: 17, attribution: "© OpenTopoMap (CC-BY-SA)"
     })
   };
-  capas["Mapa (OpenStreetMap)"].addTo(mapa);
+  capas["Mapa (IGN Argentina)"].addTo(mapa);
 
   const capaZonas = L.layerGroup().addTo(mapa);
   const capaReportes = L.layerGroup().addTo(mapa);
