@@ -96,7 +96,12 @@
     });
   }
 
-  mapa.on("click", e => seleccionar(e.latlng.lat, e.latlng.lng));
+  mapa.on("click", e => {
+    // En el celular, con la hoja desplegada del todo, el toque en el mapa solo
+    // la baja para ver el mapa; no cambia el punto seleccionado.
+    if (esMovil() && panelEstado === "max") { fijarPanel("medio"); return; }
+    seleccionar(e.latlng.lat, e.latlng.lng);
+  });
 
   // ---------------- Selección de punto ----------------
   async function seleccionar(lat, lng, nombre, zoom) {
